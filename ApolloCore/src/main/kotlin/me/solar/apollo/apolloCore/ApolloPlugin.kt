@@ -1,3 +1,5 @@
+package me.solar.apollo.apolloCore
+
 import org.bukkit.plugin.java.JavaPlugin
 
 abstract class ApolloPlugin : JavaPlugin() {
