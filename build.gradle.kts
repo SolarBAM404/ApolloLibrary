@@ -12,10 +12,41 @@ allprojects {
 
     repositories {
         mavenCentral()
+        maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/") {
+            name = "spigotmc-repo"
+        }
     }
+}
+
+subprojects {
+    apply(plugin = "kotlin")
+    apply(plugin = "com.gradleup.shadow")
+    apply(plugin = "xyz.jpenilla.run-paper")
+    apply(plugin = "xyz.jpenilla.run-velocity")
 
     dependencies {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+        compileOnly("org.spigotmc:spigot-api:1.21.4-R0.1-SNAPSHOT")
+        testImplementation(kotlin("test"))
+    }
+
+    tasks {
+        build {
+            dependsOn("shadowJar")
+        }
+
+        processResources {
+            val props = mapOf("version" to version)
+            inputs.properties(props)
+            filteringCharset = "UTF-8"
+            filesMatching("plugin.yml") {
+                expand(props)
+            }
+        }
+
+        test {
+            useJUnitPlatform()
+        }
     }
 
 }
