@@ -1,8 +1,0 @@
-name: ApolloSpigot
-version: '1.0-SNAPSHOT'
-main: me.solar.apollo.apolloSpigot.ApolloPlugin
-api-version: '1.21'
-prefix: Apollo-Api-Core
-load: STARTUP
-authors: [Solar]
-description: A Library for Solar's plugins
