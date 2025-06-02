@@ -15,6 +15,7 @@ allprojects {
         maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/") {
             name = "spigotmc-repo"
         }
+
     }
 }
 
@@ -26,6 +27,9 @@ subprojects {
 
     dependencies {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+        implementation("net.kyori:adventure-api:4.21.0")
+        implementation("net.kyori:adventure-platform-bukkit:4.4.0")
+        implementation("net.kyori:adventure-text-minimessage:4.21.0")
         compileOnly("org.spigotmc:spigot-api:1.21.4-R0.1-SNAPSHOT")
         testImplementation(kotlin("test"))
     }

@@ -1,5 +1,5 @@
 @file:JvmName("MathsUtils")
-package me.solar.apollo.apolloCore.utils
+package me.solar.apollo.apolloBukkitCore.utils
 
 import kotlin.math.abs
 import kotlin.math.cbrt
