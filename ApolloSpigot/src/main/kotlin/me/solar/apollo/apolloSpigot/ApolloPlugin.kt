@@ -1,14 +1,14 @@
 package me.solar.apollo.apolloSpigot
 
-import org.bukkit.plugin.java.JavaPlugin
+import me.solar.apollo.apolloBukkitCore.ApolloPlugin
 
-class ApolloPlugin : JavaPlugin() {
-
-    override fun onEnable() {
-        // Plugin startup logic
+class ApolloSpigotPlugin : ApolloPlugin() {
+    override fun start() {
+        TODO("Not yet implemented")
     }
 
-    override fun onDisable() {
-        // Plugin shutdown logic
+    override fun shutdown() {
+        TODO("Not yet implemented")
     }
+
 }
