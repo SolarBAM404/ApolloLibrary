@@ -1,0 +1,48 @@
+@file:JvmName("ApolloCommands")
+package me.solar.apollo.apolloBukkitCore.commands
+
+import com.mojang.brigadier.builder.LiteralArgumentBuilder
+import com.mojang.brigadier.context.CommandContext
+import com.mojang.brigadier.tree.ArgumentCommandNode
+import com.mojang.brigadier.tree.LiteralCommandNode
+import io.papermc.paper.command.brigadier.CommandSourceStack
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents
+import me.solar.apollo.apolloBukkitCore.ApolloPlugin
+
+fun createCommand(
+    name: String,
+    arguments: List<ArgumentCommandNode<CommandSourceStack, Any>>? = null,
+    action: (CommandContext<CommandSourceStack>) -> Unit
+): LiteralCommandNode<CommandSourceStack> {
+
+    var commandBuilder: LiteralArgumentBuilder<CommandSourceStack> = LiteralArgumentBuilder.literal(name)
+
+    if (arguments != null) {
+        for (i in arguments.indices) {
+            commandBuilder.then(arguments[i])
+        }
+    }
+    commandBuilder.executes { context ->
+        action(context)
+        1 // Return 1 to indicate success
+    }
+    return commandBuilder.build()
+}
+
+fun registerCommand(
+    command: LiteralCommandNode<CommandSourceStack>
+) {
+    ApolloPlugin.instance.lifecycleManager.registerEventHandler(LifecycleEvents.COMMANDS, { event ->
+        event.registrar().register(command)
+    })
+}
+
+fun registerCommands(
+    commands: List<LiteralCommandNode<CommandSourceStack>>
+) {
+    ApolloPlugin.instance.lifecycleManager.registerEventHandler(LifecycleEvents.COMMANDS, { event ->
+        for (command in commands) {
+            event.registrar().register(command)
+        }
+    })
+}
