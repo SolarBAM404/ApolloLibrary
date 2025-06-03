@@ -3,6 +3,7 @@ plugins {
     id("com.gradleup.shadow") version "8.3.0"
     id("xyz.jpenilla.run-paper") version "2.3.1"
     id("xyz.jpenilla.run-velocity") version "2.3.1"
+    id("maven-publish")
 }
 
 allprojects {
@@ -26,6 +27,7 @@ subprojects {
     apply(plugin = "com.gradleup.shadow")
     apply(plugin = "xyz.jpenilla.run-paper")
     apply(plugin = "xyz.jpenilla.run-velocity")
+    apply(plugin="maven-publish")
 
     dependencies {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
@@ -34,6 +36,24 @@ subprojects {
         implementation("net.kyori:adventure-text-minimessage:4.21.0")
         compileOnly("io.papermc.paper:paper-api:1.21.5-R0.1-SNAPSHOT")
         testImplementation(kotlin("test"))
+    }
+
+    configure<PublishingExtension> {
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/SolarBAM404/ApolloLibrary")
+                credentials {
+                    username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
+                    password = project.findProperty("gpr.key") as String? ?: System.getenv("TOKEN")
+                }
+            }
+        }
+        publications {
+            register<MavenPublication>("gpr") {
+                from(components["java"])
+            }
+        }
     }
 
     tasks {
