@@ -17,6 +17,7 @@ tasks.test {
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
+            from(components["java"])
             artifactId = "apollo-lib-core"
         }
     }
