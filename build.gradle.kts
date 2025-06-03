@@ -11,6 +11,7 @@ allprojects {
     group = "me.solar.apollo"
     version = "1.0-SNAPSHOT"
 
+
     repositories {
         mavenCentral()
         maven("https://repo.papermc.io/repository/maven-public/") {
@@ -47,11 +48,6 @@ subprojects {
                     username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
                     password = project.findProperty("gpr.key") as String? ?: System.getenv("TOKEN")
                 }
-            }
-        }
-        publications {
-            register<MavenPublication>("gpr") {
-                from(components["java"])
             }
         }
     }
