@@ -26,22 +26,19 @@ fun stripColor(string: String): String {
     return string
 }
 
-fun tell(audience: Audience?, message: String) {
-    if (audience == null) {
-        tellConsole("Audience is null. Message: $message")
-        return
-    }
-    audience.tell(message)
-}
-
 fun tell(player: Player, message: String) {
     val audience : Audience? = adventure().player(player)
-    tell(audience, message)
+    audience?.tell(message)
     return
 }
 
 fun tellConsole(message: String) {
-    tell(ApolloPlugin.adventure?.console(), message)
+    val audience: Audience? = ApolloPlugin.adventure?.console()
+    if (audience == null) {
+        println("Audience is null. Cannot send message to console: $message")
+        return
+    }
+    audience.tell(message)
 }
 
 fun error(message: String) {
@@ -53,42 +50,27 @@ fun error(throwable: Throwable) {
     throwable.printStackTrace()
 }
 
-fun line(audience: Audience?) {
+fun line(player: Player) {
+    val audience: Audience = adventure().player(player)
+    audience.line()
+}
+
+fun lineConsole() {
+    val audience: Audience? = ApolloPlugin.adventure?.console()
     if (audience == null) {
-        tellConsole("Audience is null. Cannot send line.")
+        println("Audience is null. Cannot send line message to console")
         return
     }
     audience.line()
 }
 
-fun line(player: Player) {
+fun box(player: Player, message: String) {
     val audience: Audience? = adventure().player(player)
-    line(audience)
-}
-
-fun lineConsole() {
-    line(ApolloPlugin.adventure?.console())
-}
-
-fun box(audience: Audience?, message: String) {
     if (audience == null) {
-        tellConsole("Audience is null. Cannot send box with message: $message")
+        tellConsole("Audience is null. Cannot send box to player: ${player.name}")
         return
     }
     audience.box(message)
-}
-
-fun box(player: Player, message: String) {
-    val audience: Audience? = adventure().player(player)
-    box(audience, message)
-}
-
-fun box(message: String) {
-    box(ApolloPlugin.adventure?.console(), message)
-}
-
-fun messageLater(audience: Audience, message: String, delay: Long) {
-    audience.messageLater(message, delay)
 }
 
 fun Audience.tell(message: String) {
