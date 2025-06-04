@@ -29,11 +29,35 @@ fun createCommand(
     return commandBuilder
 }
 
+fun createCommand(
+    name: String,
+    action: (CommandContext<CommandSourceStack>) -> Unit
+): LiteralArgumentBuilder<CommandSourceStack> {
+    return createCommand(name, null, action)
+}
+
+fun createCommand(
+    name: String
+): LiteralArgumentBuilder<CommandSourceStack> {
+    return createCommand(name, null) { context ->
+        // Default action does nothing
+    }
+
+}
+
 fun registerCommand(
     command: LiteralCommandNode<CommandSourceStack>
 ) {
     ApolloPlugin.instance.lifecycleManager.registerEventHandler(LifecycleEvents.COMMANDS, { event ->
         event.registrar().register(command)
+    })
+}
+
+fun registerCommand(
+    command: LiteralArgumentBuilder<CommandSourceStack>
+) {
+    ApolloPlugin.instance.lifecycleManager.registerEventHandler(LifecycleEvents.COMMANDS, { event ->
+        event.registrar().register(command.build())
     })
 }
 
