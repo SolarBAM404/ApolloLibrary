@@ -1,6 +1,6 @@
-package me.solar.apollo.apolloBukkitCore.runnables
+package me.solar.apollo.apolloCore.runnables
 
-import me.solar.apollo.apolloBukkitCore.ApolloPlugin
+import me.solar.apollo.apolloCore.ApolloPlugin
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 

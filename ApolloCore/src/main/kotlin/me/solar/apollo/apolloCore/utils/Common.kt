@@ -1,7 +1,7 @@
-package me.solar.apollo.apolloBukkitCore.utils
+package me.solar.apollo.apolloCore.utils
 
-import me.solar.apollo.apolloBukkitCore.ApolloPlugin
-import me.solar.apollo.apolloBukkitCore.runnables.RunnableObject
+import me.solar.apollo.apolloCore.ApolloPlugin
+import me.solar.apollo.apolloCore.runnables.RunnableObject
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.platform.bukkit.BukkitAudiences
 import net.kyori.adventure.text.Component

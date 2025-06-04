@@ -1,8 +1,7 @@
 @file:JvmName("Vector")
-package me.solar.apollo.apolloBukkitCore.utils
+package me.solar.apollo.apolloCore.utils
 
 import org.bukkit.Location
-import org.bukkit.util.Vector
 import kotlin.math.acos
 import kotlin.math.pow
 import kotlin.math.sqrt

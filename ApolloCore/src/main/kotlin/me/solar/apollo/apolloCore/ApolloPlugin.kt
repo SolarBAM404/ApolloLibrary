@@ -1,4 +1,4 @@
-package me.solar.apollo.apolloBukkitCore
+package me.solar.apollo.apolloCore
 
 import net.kyori.adventure.platform.bukkit.BukkitAudiences
 import org.bukkit.plugin.java.JavaPlugin

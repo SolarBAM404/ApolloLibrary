@@ -1,6 +1,6 @@
 @file:JvmName("FileUtils")
 
-package me.solar.apollo.apolloBukkitCore.utils
+package me.solar.apollo.apolloCore.utils
 
 import java.io.File
 
