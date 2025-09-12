@@ -1,4 +1,4 @@
-package me.solar.apollo.apolloCore.file;
+package me.solarbam.apollo.apolloCore.file;
 
 import lombok.Getter;
 import com.google.gson.Gson;

@@ -1,6 +1,7 @@
-package me.solar.apollo.apolloCore.utils
+package me.solarbam.apollo.apolloCore.utils
 
-import me.solar.apollo.apolloCore.Common
+import me.solarbam.apollo.apolloCore.Common
+import me.solarbam.apollo.apolloCore.runnables.RunnableObject
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
 
@@ -14,7 +15,7 @@ fun Audience.line() {
 }
 
 fun Audience.messageLater(message: String, delay: Long) {
-    me.solar.apollo.apolloCore.runnables.RunnableObject.create {
+    RunnableObject.create {
         tell(message)
     }.startTask(delay)
 }

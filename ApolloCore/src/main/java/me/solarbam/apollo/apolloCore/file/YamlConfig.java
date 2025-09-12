@@ -1,4 +1,4 @@
-package me.solar.apollo.apolloCore.file;
+package me.solarbam.apollo.apolloCore.file;
 
 public class YamlConfig extends FileConfig {
 

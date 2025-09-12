@@ -1,5 +1,5 @@
 @file:JvmName("ApolloCommands")
-package me.solar.apollo.apolloCore.commands
+package me.solarbam.apollo.apolloCore.commands
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
@@ -7,7 +7,7 @@ import com.mojang.brigadier.tree.ArgumentCommandNode
 import com.mojang.brigadier.tree.LiteralCommandNode
 import io.papermc.paper.command.brigadier.CommandSourceStack
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents
-import me.solar.apollo.apolloCore.ApolloPlugin
+import me.solarbam.apollo.apolloCore.ApolloPlugin
 
 fun createCommand(
     name: String,

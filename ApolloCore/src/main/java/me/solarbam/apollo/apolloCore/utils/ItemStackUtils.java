@@ -1,6 +1,6 @@
-package me.solar.apollo.apolloCore.utils;
+package me.solarbam.apollo.apolloCore.utils;
 
-import me.solar.apollo.apolloCore.Common;
+import me.solarbam.apollo.apolloCore.Common;
 import net.kyori.adventure.text.Component;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;

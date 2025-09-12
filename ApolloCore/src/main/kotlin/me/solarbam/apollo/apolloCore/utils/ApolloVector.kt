@@ -1,7 +1,8 @@
 @file:JvmName("Vector")
-package me.solar.apollo.apolloCore.utils
+package me.solarbam.apollo.apolloCore.utils
 
 import org.bukkit.Location
+import org.bukkit.util.Vector
 import kotlin.math.acos
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -41,13 +42,13 @@ class ApolloVector {
         }
 
         @JvmStatic
-        fun fromBukkit(v: org.bukkit.util.Vector): ApolloVector {
+        fun fromBukkit(v: Vector): ApolloVector {
             return ApolloVector(v.x, v.y, v.z)
         }
 
         @JvmStatic
-        fun toBukkit(v: ApolloVector): org.bukkit.util.Vector {
-            return org.bukkit.util.Vector(v.x, v.y, v.z)
+        fun toBukkit(v: ApolloVector): Vector {
+            return Vector(v.x, v.y, v.z)
         }
     }
 
@@ -118,15 +119,15 @@ class ApolloVector {
     }
 }
 
-fun ApolloVector.toBukkit() : org.bukkit.util.Vector {
-    return org.bukkit.util.Vector(x, y, z)
+fun ApolloVector.toBukkit() : Vector {
+    return Vector(x, y, z)
 }
 
 fun ApolloVector.toLocation() : Location {
     return Location(null, x, y, z)
 }
 
-fun ApolloVector.fromBukkit(v : org.bukkit.util.Vector) : ApolloVector {
+fun ApolloVector.fromBukkit(v : Vector) : ApolloVector {
     return ApolloVector(v.x, v.y, v.z)
 }
 
@@ -134,7 +135,7 @@ fun ApolloVector.fromLocation(location: Location) : ApolloVector {
     return ApolloVector(location.x, location.y, location.z)
 }
 
-fun org.bukkit.util.Vector.toApolloVector() : ApolloVector {
+fun Vector.toApolloVector() : ApolloVector {
     return ApolloVector(x, y, z)
 }
 

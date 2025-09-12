@@ -1,4 +1,4 @@
-package me.solar.apollo.apolloCore.utils;
+package me.solarbam.apollo.apolloCore.utils;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;

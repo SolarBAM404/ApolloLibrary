@@ -1,23 +1,13 @@
-package me.solar.apollo.apolloCore;
+package me.solarbam.apollo.apolloCore;
 
-//import me.solar.apollo.apolloCore.settings.SimpleSettings;
-import me.solar.apollo.apolloCore.utils.Valid;
+//import me.solarbam.apollo.apolloCore.settings.SimpleSettings;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.regex.Pattern;
 
 public class Common {

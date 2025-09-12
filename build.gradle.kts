@@ -8,7 +8,7 @@ plugins {
 
 allprojects {
 
-    group = "me.solar.apollo"
+    group = "me.solarbam.apollo"
     version = "1.0-SNAPSHOT"
 
 

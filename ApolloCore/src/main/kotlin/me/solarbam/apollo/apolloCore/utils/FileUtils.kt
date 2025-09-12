@@ -1,5 +1,4 @@
-package me.solar.apollo.apolloCore.utils
-import me.solar.apollo.apolloCore.utils.FileUtils
+package me.solarbam.apollo.apolloCore.utils
 import java.io.File
 
 
