@@ -37,6 +37,10 @@ subprojects {
         implementation("net.kyori:adventure-text-minimessage:4.21.0")
         compileOnly("io.papermc.paper:paper-api:1.21.5-R0.1-SNAPSHOT")
         testImplementation(kotlin("test"))
+
+        // Lombok
+        implementation("org.projectlombok:lombok:1.18.38")
+        annotationProcessor("org.projectlombok:lombok:1.18.38")
     }
 
     configure<PublishingExtension> {
