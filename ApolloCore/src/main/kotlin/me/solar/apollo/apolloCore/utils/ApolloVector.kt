@@ -18,6 +18,39 @@ class ApolloVector {
         this.z = z
     }
 
+    companion object {
+
+        @JvmStatic
+        fun fromVector(v: ApolloVector): ApolloVector {
+            return ApolloVector(v.x, v.y, v.z)
+        }
+
+        @JvmStatic
+        fun toVector(x: Double, y: Double, z: Double): ApolloVector {
+            return ApolloVector(x, y, z)
+        }
+
+        @JvmStatic
+        fun fromLocation(location: Location): ApolloVector {
+            return ApolloVector(location.x, location.y, location.z)
+        }
+
+        @JvmStatic
+        fun toLocation(v: ApolloVector): Location {
+            return Location(null, v.x, v.y, v.z)
+        }
+
+        @JvmStatic
+        fun fromBukkit(v: org.bukkit.util.Vector): ApolloVector {
+            return ApolloVector(v.x, v.y, v.z)
+        }
+
+        @JvmStatic
+        fun toBukkit(v: ApolloVector): org.bukkit.util.Vector {
+            return org.bukkit.util.Vector(v.x, v.y, v.z)
+        }
+    }
+
     fun add(vector: ApolloVector): ApolloVector {
         return ApolloVector(x + vector.x, y + vector.y, z + vector.z)
     }
@@ -89,26 +122,21 @@ fun ApolloVector.toBukkit() : org.bukkit.util.Vector {
     return org.bukkit.util.Vector(x, y, z)
 }
 
-
 fun ApolloVector.toLocation() : Location {
     return Location(null, x, y, z)
 }
-
 
 fun ApolloVector.fromBukkit(v : org.bukkit.util.Vector) : ApolloVector {
     return ApolloVector(v.x, v.y, v.z)
 }
 
-
 fun ApolloVector.fromLocation(location: Location) : ApolloVector {
     return ApolloVector(location.x, location.y, location.z)
 }
 
-
 fun org.bukkit.util.Vector.toApolloVector() : ApolloVector {
     return ApolloVector(x, y, z)
 }
-
 
 fun Location.toApolloVector() : ApolloVector {
     return ApolloVector(x, y, z)
