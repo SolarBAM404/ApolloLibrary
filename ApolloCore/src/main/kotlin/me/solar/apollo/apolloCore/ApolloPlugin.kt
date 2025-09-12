@@ -8,6 +8,7 @@ abstract class ApolloPlugin : JavaPlugin() {
     companion object {
         lateinit var instance: ApolloPlugin
 
+        @JvmStatic
         var adventure : BukkitAudiences? = null
             get() {
                 if(this.adventure == null) {
