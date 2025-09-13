@@ -1,0 +1,96 @@
+//plugins {
+//    id 'org.jetbrains.kotlin.jvm' version '2.2.0-RC'
+//    id 'com.gradleup.shadow' version '8.3.0'
+//    id 'xyz.jpenilla.run-paper' version '2.3.1'
+//    id 'xyz.jpenilla.run-velocity' version '2.3.1'
+//    id 'maven-publish'
+//    id 'org.jreleaser' version '1.20.0'
+//}
+//
+//allprojects (
+//    group = 'me.solarbam.apollo',
+//    version = '1.0-SNAPSHOT',
+//
+//    repositories {
+//        mavenCentral()
+//        maven {
+//            url 'https://repo.papermc.io/repository/maven-public/'
+//            name = 'papermc'
+//        }
+//        maven {
+//            url 'https://oss.sonatype.org/content/groups/public/'
+//            name = 'sonatype'
+//        }
+//    }
+//)
+//
+//subprojects {
+//    apply plugin: 'org.jetbrains.kotlin.jvm'
+//    apply plugin: 'com.gradleup.shadow'
+//    apply plugin: 'xyz.jpenilla.run-paper'
+//    apply plugin: 'xyz.jpenilla.run-velocity'
+//    apply plugin: 'maven-publish'
+//
+//    dependencies {
+//        implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+//        implementation 'net.kyori:adventure-api:4.21.0'
+//        implementation 'net.kyori:adventure-platform-bukkit:4.4.0'
+//        implementation 'net.kyori:adventure-text-minimessage:4.21.0'
+//        compileOnly 'io.papermc.paper:paper-api:1.21.5-R0.1-SNAPSHOT'
+//        testImplementation "org.jetbrains.kotlin:kotlin-test"
+//
+//        // Lombok
+//        implementation 'org.projectlombok:lombok:1.18.38'
+//        annotationProcessor 'org.projectlombok:lombok:1.18.38'
+//    }
+//
+//    tasks.named('build') {
+//        dependsOn 'shadowJar'
+//    }
+//
+//    tasks.named('processResources') {
+//        def props = [version: version]
+//        inputs.properties props
+//        filteringCharset = 'UTF-8'
+//        filesMatching('plugin.yml') {
+//            expand props
+//        }
+//    }
+//
+//    tasks.named('test') {
+//        useJUnitPlatform()
+//    }
+//}
+//
+//jreleaser {
+//    deploy {
+//        maven {
+//            mavenCentral {
+//                sonatype {
+//                    active = 'ALWAYS'
+//                    url = 'https://central.sonatype.com/api/v1/publisher'
+//                    stagingRepository('build/staging-deploy')
+//                }
+//            }
+//        }
+//    }
+//}
+//
+//def targetJavaVersion = 21
+//kotlin {
+//    jvmToolchain(targetJavaVersion)
+//}
+//
+//tasks.named('build') {
+//    dependsOn 'shadowJar'
+//}
+//
+//tasks.named('processResources') {
+//    def props = [version: version]
+//    inputs.properties props
+//    filteringCharset = 'UTF-8'
+//    filesMatching('plugin.yml') {
+//        expand props
+//    }
+//}
+//
