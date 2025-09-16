@@ -1,0 +1,8 @@
+name: Apollo Library
+version: '1.0-SNAPSHOT'
+main: me.solar.apolloLibrary.ApolloLibrary
+api-version: '1.21'
+prefix: Apollo-Library
+load: STARTUP
+authors: [Solar]
+description: A Solar library
