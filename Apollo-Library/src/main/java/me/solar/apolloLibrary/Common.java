@@ -2,6 +2,7 @@ package me.solar.apolloLibrary;
 
 import lombok.Getter;
 import me.solar.apolloLibrary.core.ApolloPlugin;
+import me.solar.apolloLibrary.exceptions.PluginException;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.apache.commons.lang3.NotImplementedException;
@@ -41,6 +42,9 @@ public class Common {
         logPrefixComponent = component(prefix);
     }
 
+
+
+    // ------------------- Messages ------------------ //
 
     public static Component component(String message) {
         MiniMessage mm = MiniMessage.miniMessage();
@@ -104,12 +108,17 @@ public class Common {
         return "<underline>______________________________________________________________</underline>";
     }
 
+    // ------------------- String Utils ------------------ //
+
     public static String limitString(String string, int maxLength) {
         if (string.length() <= maxLength) {
             return string;
         }
         return string.substring(0, maxLength - 3) + "...";
     }
+
+
+    // ------------------- Plugin Utils ------------------ //
 
     /**
      * Checks if a plugin is enabled. We also schedule an async task to make
@@ -136,10 +145,10 @@ public class Common {
             return false;
 
         if (!found.isEnabled())
-            return false; // TODO handle disabled plugins
-//            runLaterAsync(0, () -> Valid.checkBoolean(found.isEnabled(), SimplePlugin.getNamed() + " could not hook into " + pluginName + " as the plugin is disabled! (DO NOT REPORT THIS TO " + SimplePlugin.getNamed() + ", look for errors above and contact support of '" + pluginName + "')"));
+            throw new PluginException("Plugin " + pluginName + " is not enabled!");
 
         return true;
     }
+
 
 }
