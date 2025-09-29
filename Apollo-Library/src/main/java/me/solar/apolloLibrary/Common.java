@@ -27,7 +27,7 @@ public class Common {
     private static Component tellPrefixComponent = component("");
 
     @Getter
-    private static String logPrefix = "<gray>[<gold>" + ApolloPlugin.getName() + "<gray>] ";
+    private static String logPrefix = "<gray>[<gold>" + ApolloPlugin.getPluginName() + "<gray>] ";
 
     @Getter
     private static Component logPrefixComponent = component("");

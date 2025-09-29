@@ -7,7 +7,7 @@ public abstract class ApolloPlugin extends JavaPlugin {
 
 
     @Getter
-    private static String name;
+    private static String pluginName;
 
     @Getter
     private static String version;

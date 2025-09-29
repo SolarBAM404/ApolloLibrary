@@ -16,11 +16,11 @@ public abstract class TimerTask extends RunnableObject {
 
     @Override
     public void accept(BukkitTask bukkitTask) {
-        currentTime++;
         if (currentTime >= time) {
             bukkitTask.cancel();
             return;
         }
+        currentTime++;
         run();
     }
 
