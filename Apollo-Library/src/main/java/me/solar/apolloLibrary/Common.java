@@ -3,6 +3,7 @@ package me.solar.apolloLibrary;
 import lombok.Getter;
 import me.solar.apolloLibrary.core.ApolloPlugin;
 import me.solar.apolloLibrary.exceptions.PluginException;
+import me.solar.apolloLibrary.runnables.RunnableObject;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.apache.commons.lang3.NotImplementedException;
@@ -11,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class Common {
 
@@ -41,8 +43,6 @@ public class Common {
         logPrefix = prefix;
         logPrefixComponent = component(prefix);
     }
-
-
 
     // ------------------- Messages ------------------ //
 
@@ -155,5 +155,18 @@ public class Common {
         return true;
     }
 
+    // ------------------- Runnables ------------------ //
+
+    public static void runTask(JavaPlugin plugin, RunnableObject runnableObject) {
+        Bukkit.getServer().getScheduler().runTask(plugin, runnableObject);
+    }
+
+    public static void runTaskLater(JavaPlugin plugin, RunnableObject runnableObject, long delayTicks) {
+        Bukkit.getServer().getScheduler().runTaskLater(plugin, runnableObject, delayTicks);
+    }
+
+    public static void runTaskTimer(JavaPlugin plugin, RunnableObject runnableObject, long delayTicks, long periodTicks) {
+        Bukkit.getServer().getScheduler().runTaskTimer(plugin, runnableObject, delayTicks, periodTicks);
+    }
 
 }
