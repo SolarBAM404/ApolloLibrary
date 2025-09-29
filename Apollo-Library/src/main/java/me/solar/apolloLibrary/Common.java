@@ -90,6 +90,11 @@ public class Common {
         ApolloLibrary.getBukkitServer().getConsoleSender().sendMessage(component);
     }
 
+    public static void actionBar(Player player, String message) {
+        Component component = component(message);
+        player.sendActionBar(component);
+    }
+
     // ------------------- Aesthetics ------------------ //
 
     public static String consoleLine() {
