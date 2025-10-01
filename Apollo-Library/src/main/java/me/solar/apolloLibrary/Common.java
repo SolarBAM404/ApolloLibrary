@@ -4,6 +4,7 @@ import lombok.Getter;
 import me.solar.apolloLibrary.core.ApolloPlugin;
 import me.solar.apolloLibrary.exceptions.PluginException;
 import me.solar.apolloLibrary.runnables.RunnableObject;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.apache.commons.lang3.NotImplementedException;
@@ -51,21 +52,21 @@ public class Common {
         return mm.deserialize(message);
     }
 
-    public static void tell(Player player, String message) {
+    public static void tell(Audience audience, String message) {
         Component component = component(message);
-        player.sendMessage(component);
+        audience.sendMessage(component);
     }
 
-    public static void tellNoPrefix(Player player, String message) {
+    public static void tellNoPrefix(Audience audience, String message) {
         Component component = component(message);
-        player.sendMessage(component);
+        audience.sendMessage(component);
     }
 
-    public static void tellLater(Player player, String message, long delayTicks) {
+    public static void tellLater(Audience audience, String message, long delayTicks) {
         throw new NotImplementedException();
     }
 
-    public static void tellLaterNoPrefix(Player player, String message, long delayTicks) {
+    public static void tellLaterNoPrefix(Audience audience, String message, long delayTicks) {
         throw new NotImplementedException();
     }
 
@@ -90,9 +91,9 @@ public class Common {
         ApolloLibrary.getBukkitServer().getConsoleSender().sendMessage(component);
     }
 
-    public static void actionBar(Player player, String message) {
+    public static void actionBar(Audience audience, String message) {
         Component component = component(message);
-        player.sendActionBar(component);
+        audience.sendActionBar(component);
     }
 
     // ------------------- Aesthetics ------------------ //
