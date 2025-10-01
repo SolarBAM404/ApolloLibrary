@@ -30,6 +30,7 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
+        working-directory: Apollo-Library
 
       - name: Run Gradle clean, publish, and jreleaserDeploy
         if: steps.check_commit.outputs.match == 'true'
