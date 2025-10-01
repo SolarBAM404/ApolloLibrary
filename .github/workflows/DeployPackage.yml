@@ -22,11 +22,11 @@ jobs:
             echo "match=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '21'
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
@@ -34,3 +34,4 @@ jobs:
       - name: Run Gradle clean, publish, and jreleaserDeploy
         if: steps.check_commit.outputs.match == 'true'
         run: ./gradlew clean publish jreleaserDeploy
+        working-directory: Apollo-Library
