@@ -10,7 +10,7 @@ public class XpProgressCountdownTimer extends CountdownTask {
     /**
      * The players to update XP bar progress for.
      */
-    private Player[] players;
+    private final Player[] players;
 
     /**
      * Constructs an XpProgressCountdownTimer with the specified time and players.
@@ -27,7 +27,7 @@ public class XpProgressCountdownTimer extends CountdownTask {
      */
     @Override
     public void action() {
-        if (players == null || players.length == 0) {
+        if (players == null) {
             return;
         }
         for (Player player : players) {

@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 public class ActionCountdownTimer extends CountdownTask {
 
     /** The players to display the countdown to. */
-    private Player[] players;
+    private final Player[] players;
 
     /** The action bar message to display. */
     private String actionBarMessage;
@@ -43,7 +43,7 @@ public class ActionCountdownTimer extends CountdownTask {
      */
     @Override
     public void action() {
-        if (players == null || players.length == 0) {
+        if (players == null) {
             return;
         }
 

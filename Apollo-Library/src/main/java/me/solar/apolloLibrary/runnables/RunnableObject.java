@@ -1,6 +1,5 @@
 package me.solar.apolloLibrary.runnables;
 
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.function.Consumer;

@@ -8,17 +8,17 @@ import org.bukkit.Location;
 public class CuboidRegion {
 
     /** The minimum X coordinate of the region. */
-    private double minX;
+    private final double minX;
     /** The minimum Y coordinate of the region. */
-    private double minY;
+    private final double minY;
     /** The minimum Z coordinate of the region. */
-    private double minZ;
+    private final double minZ;
     /** The maximum X coordinate of the region. */
-    private double maxX;
+    private final double maxX;
     /** The maximum Y coordinate of the region. */
-    private double maxY;
+    private final double maxY;
     /** The maximum Z coordinate of the region. */
-    private double maxZ;
+    private final double maxZ;
 
     /**
      * Constructs a CuboidRegion with specified min and max coordinates.

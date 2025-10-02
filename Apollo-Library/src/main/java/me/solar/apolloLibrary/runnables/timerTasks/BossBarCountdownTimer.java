@@ -1,11 +1,7 @@
 package me.solar.apolloLibrary.runnables.timerTasks;
 
 import me.solar.apolloLibrary.Common;
-import me.solar.apolloLibrary.runnables.TimerTask;
 import net.kyori.adventure.bossbar.BossBar;
-import org.bukkit.Bukkit;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
 import org.bukkit.entity.Player;
 
 /**
@@ -14,7 +10,7 @@ import org.bukkit.entity.Player;
 public class BossBarCountdownTimer extends CountdownTask {
 
     /** The players to display the boss bar to. */
-    private Player[] players;
+    private final Player[] players;
     /** The color of the boss bar. */
     BossBar.Color color = BossBar.Color.RED;
     /** The overlay style of the boss bar. */
