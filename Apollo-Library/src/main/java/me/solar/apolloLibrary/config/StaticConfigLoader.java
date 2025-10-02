@@ -10,10 +10,20 @@ import java.lang.reflect.Modifier;
 import java.nio.file.Path;
 import java.util.List;
 
+/**
+ * Utility class for loading and saving static config classes.
+ */
 public class StaticConfigLoader {
 
-    /// Saves the static fields of the given config class to the specified path.
-    /// The config class must be annotated with @ConfigFormat and its fields with @ConfigKey
+    /**
+     * Saves the static fields of the given config class to the specified path.
+     * The config class must be annotated with {@link ConfigFormat} and its fields with {@link ConfigKey}.
+     *
+     * @param configClass the config class
+     * @param path        the path to save to
+     * @throws IOException            if an I/O error occurs
+     * @throws IllegalAccessException if field access fails
+     */
     public static void saveConfig(@NotNull Class<?> configClass, Path path) throws IOException, IllegalAccessException {
         ConfigFormat format = configClass.getAnnotation(ConfigFormat.class);
         if (format == null) throw new RuntimeException("No config format specified!");
@@ -29,8 +39,15 @@ public class StaticConfigLoader {
         }
     }
 
-    /// Loads the static fields of the given config class from the specified path.
-    /// The config class must be annotated with @ConfigFormat and its fields with @ConfigKey
+    /**
+     * Loads the static fields of the given config class from the specified path.
+     * The config class must be annotated with {@link ConfigFormat} and its fields with {@link ConfigKey}.
+     *
+     * @param configClass the config class
+     * @param path        the path to load from
+     * @throws IOException            if an I/O error occurs
+     * @throws IllegalAccessException if field access fails
+     */
     public static void loadConfig(@NotNull Class<?> configClass, Path path) throws IOException, IllegalAccessException {
         ConfigFormat format = configClass.getAnnotation(ConfigFormat.class);
         if (format == null) throw new RuntimeException("No config format specified!");
