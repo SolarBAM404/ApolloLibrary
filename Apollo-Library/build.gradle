@@ -30,6 +30,7 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:5.20.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.20.0'
     testImplementation("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
+    testImplementation 'org.mockbukkit.mockbukkit:mockbukkit-v1.21:4.78.0'
 
     testCompileOnly("org.projectlombok:lombok:1.18.40")
     testAnnotationProcessor("org.projectlombok:lombok:1.18.40")
@@ -129,12 +130,11 @@ jreleaser {
     }
 }
 
-
 runServer {
     // Configure the Minecraft version for our task.
     // This is the only required configuration besides applying the plugin.
     // Your plugin's jar (or shadowJar if present) will be used automatically.
-    minecraftVersion("1.21")
+    minecraftVersion("1.21.8")
 }
 
 test {
