@@ -1,6 +1,7 @@
 package me.solar.apolloLibrary;
 
 import net.kyori.adventure.text.Component;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -45,6 +46,17 @@ public class ItemStackUtils {
 
         itemMeta.lore(loreList);
         item.setItemMeta(itemMeta);
+    }
+
+    public static ItemStack createItemStack(Material material, String name, String... lore) {
+        ItemStack item = new ItemStack(material);
+        setDisplayName(item, name);
+        setLore(item, lore);
+        return item;
+    }
+
+    public static ItemStack createItemStack(Material material) {
+        return new ItemStack(material);
     }
 
 }
