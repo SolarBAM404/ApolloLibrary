@@ -11,7 +11,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.conversations.Conversation;
-import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -237,6 +237,10 @@ public class Common {
             throw new PluginException("Plugin " + pluginName + " is not enabled!");
 
         return true;
+    }
+
+    public static void registerListener(JavaPlugin plugin, Listener listener) {
+        Bukkit.getPluginManager().registerEvents(listener, plugin);
     }
 
     // ------------------- Runnables ------------------ //
