@@ -170,4 +170,22 @@ public class Common {
         Bukkit.getServer().getScheduler().runTaskTimer(plugin, runnableObject, delayTicks, periodTicks);
     }
 
+    public static RunnableObject runTask(JavaPlugin plugin, Runnable runnable) {
+        RunnableObject runnableObject = RunnableObject.of(runnable);
+        Bukkit.getServer().getScheduler().runTask(plugin, runnableObject);
+        return runnableObject;
+    }
+
+    public static RunnableObject runTaskLater(JavaPlugin plugin, Runnable runnable, long delayTicks) {
+        RunnableObject runnableObject = RunnableObject.of(runnable);
+        Bukkit.getServer().getScheduler().runTaskLater(plugin, runnableObject, delayTicks);
+        return runnableObject;
+    }
+
+    public static RunnableObject runTaskTimer(JavaPlugin plugin, Runnable runnable, long delayTicks, long periodTicks) {
+        RunnableObject runnableObject = RunnableObject.of(runnable);
+        Bukkit.getServer().getScheduler().runTaskTimer(plugin, runnableObject, delayTicks, periodTicks);
+        return runnableObject;
+    }
+
 }
