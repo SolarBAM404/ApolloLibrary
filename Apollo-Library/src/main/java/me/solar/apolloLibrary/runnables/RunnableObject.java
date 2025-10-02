@@ -10,4 +10,14 @@ public abstract class RunnableObject implements Consumer<BukkitTask> {
     @Override
     public abstract void accept(BukkitTask bukkitTask);
 
+
+    public static RunnableObject of(Runnable runnable) {
+        return new RunnableObject() {
+            @Override
+            public void accept(BukkitTask bukkitTask) {
+                runnable.run();
+            }
+        };
+    }
+
 }
