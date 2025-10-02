@@ -1,6 +1,7 @@
 package me.solar.apolloLibrary.menus;
 
 import lombok.Generated;
+import me.solar.apolloLibrary.Common;
 import me.solar.apolloLibrary.ItemStackUtils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -17,12 +18,12 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Menu {
+public abstract class Menu {
 
     private static final Map<Player, Menu> menus = new HashMap();
     private final Component name;
     protected final Inventory inventory;
-    private final Map<Integer, MenuItem> menuItems;
+    private final Map<Integer, MenuItem> menuItems = new HashMap<>();
     protected boolean autoCancel;
 
     public static void addMenu(Menu menu, Player player) {
@@ -42,14 +43,13 @@ public class Menu {
     }
 
     protected Menu(String name, int size) {
-        this(Common.color(name), size);
+        this(Common.component(name), size);
     }
 
     protected Menu(Component name, int size) {
-        this.menuItems = new HashMap();
         this.autoCancel = true;
         this.name = name;
-        this.inventory = Bukkit.createInventory((InventoryHolder)null, size, name);
+        this.inventory = Bukkit.createInventory(null, size, name);
     }
 
     protected abstract void initialize(Player var1);
@@ -101,7 +101,7 @@ public class Menu {
     }
 
     public MenuItem getMenuItem(int slot) {
-        return (MenuItem)this.menuItems.get(slot);
+        return this.menuItems.get(slot);
     }
 
     public void onDrag(InventoryDragEvent event) {
