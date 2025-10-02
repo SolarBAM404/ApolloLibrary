@@ -13,6 +13,8 @@ import java.util.UUID;
 
 public class RegionSelectorTool extends Tool{
 
+    public static RegionSelectorTool INSTANCE = new RegionSelectorTool(null);
+
     protected static final Material primaryMaterial = Material.GOLD_BLOCK;
     protected static final Material secondaryMaterial = Material.REDSTONE_BLOCK;
     protected final Map<UUID, CuboidRegion> regions = new HashMap<>();
@@ -23,14 +25,27 @@ public class RegionSelectorTool extends Tool{
 
     public RegionSelectorTool(JavaPlugin plugin) {
         super(plugin);
+        INSTANCE = this;
     }
 
     public static RegionSelectorTool getInstance() {
         try {
             Class<?> clazz = Class.forName(Thread.currentThread().getStackTrace()[2].getClassName()); // Get the calling class
-            return (RegionSelectorTool) clazz.getDeclaredMethod("getInstance").invoke(null);
-        } catch (ClassNotFoundException | InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
-            throw new RuntimeException("Falied to get instance of RegionSelectorTool", e);
+            RegionSelectorTool tool = (RegionSelectorTool) clazz.getField("INSTANCE").get(null);
+            if (tool == null) {
+                if (!RegionSelectorTool.class.isAssignableFrom(clazz)) {
+                    throw new IllegalStateException("The class " + clazz.getName() + " must extend RegionSelectorTool");
+                }
+
+                tool = (RegionSelectorTool) clazz.getConstructor(JavaPlugin.class).newInstance(JavaPlugin.getProvidingPlugin(clazz));
+            }
+
+            return tool;
+        } catch (ClassNotFoundException | InvocationTargetException | IllegalAccessException | NoSuchFieldException | NoSuchMethodException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Falied to get instance of the tool", e);
+        } catch (InstantiationException e) {
+            throw new RuntimeException("Failed to create new instance of the tool", e);
         }
     }
 
