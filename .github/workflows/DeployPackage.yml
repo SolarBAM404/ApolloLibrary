@@ -44,6 +44,10 @@ jobs:
 
       # Post JARs to Maven Central
 
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+        working-directory: Apollo-Library
+
       - name: Release to Maven Central
         working-directory: Apollo-Library
         if: steps.check_commit.outputs.match == 'true'
