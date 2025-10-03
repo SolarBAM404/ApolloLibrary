@@ -26,6 +26,9 @@ jobs:
           fi
 
       # Configure build steps as you'd normally do
+      
+      - name: Change directory
+        run: cd Apollo-Library
 
       - name: Setup Java
         uses: actions/setup-java@v4
