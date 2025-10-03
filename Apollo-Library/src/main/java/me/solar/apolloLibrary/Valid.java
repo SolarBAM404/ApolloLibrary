@@ -32,6 +32,30 @@ public class Valid {
         return !isNull(object);
     }
 
+    public static void checkNull(Object object, String message) {
+        if (isNull(object)) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    public static void checkNotNull(Object object) {
+        if (isNotNull(object)) {
+            throw new IllegalArgumentException("Object cannot be null");
+        }
+    }
+
+    public static void checkNotNull(Object object, String message) {
+        if (isNotNull(object)) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    public static void checkNull(Object object) {
+        if (isNull(object)) {
+            throw new IllegalArgumentException("Object cannot be null");
+        }
+    }
+
     /**
      * Throws an IllegalArgumentException with the given message if the boolean is false.
      *

@@ -14,6 +14,7 @@ import org.bukkit.conversations.Conversation;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 
 /**
  * Common utility methods for messaging, plugin checks, and scheduling tasks.
@@ -79,6 +80,12 @@ public class Common {
     public static void tell(Audience audience, String message) {
         Component component = component(message);
         audience.sendMessage(component);
+    }
+
+    public static void tell(Audience audience, String... messages) {
+        for (String message : messages) {
+            tell(audience, message);
+        }
     }
 
     /**
@@ -312,6 +319,10 @@ public class Common {
         RunnableObject runnableObject = RunnableObject.of(runnable);
         Bukkit.getServer().getScheduler().runTaskTimer(plugin, runnableObject, delayTicks, periodTicks);
         return runnableObject;
+    }
+
+    public static void cancelTask(BukkitTask bukkitTask) {
+        bukkitTask.cancel();
     }
 
 }
