@@ -78,7 +78,7 @@ public final class ExpiringMap<K, V> implements ConcurrentMap<K, V> {
     }
 
     public static <K, V> ExpiringMap<K, V> create() {
-        return new ExpiringMap<K, V>(builder());
+        return new ExpiringMap<K, V>((Builder<K, V>) builder());
     }
 
     public synchronized void addExpirationListener(ExpirationListener<K, V> listener) {
