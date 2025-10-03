@@ -29,7 +29,6 @@ jobs:
 
       - name: Setup Java
         uses: actions/setup-java@v4
-        working-directory: Apollo-Library
         with:
           java-version: 21
           distribution: 'zulu'
@@ -58,7 +57,6 @@ jobs:
       # Create a release
 
       - name: Run JReleaser
-        working-directory: Apollo-Library
         if: steps.check_commit.outputs.match == 'true'
         uses: jreleaser/release-action@v2
         env:
@@ -67,7 +65,6 @@ jobs:
       # Persist logs
 
       - name: JReleaser release output
-        working-directory: Apollo-Library
         if: always()
         uses: actions/upload-artifact@v4
         with:
