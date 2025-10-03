@@ -37,6 +37,7 @@ public abstract class TimerTask extends RunnableObject {
         }
         currentTime++;
         run();
+        super.accept(bukkitTask);
     }
 
     /**

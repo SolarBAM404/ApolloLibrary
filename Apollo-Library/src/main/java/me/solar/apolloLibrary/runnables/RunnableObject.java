@@ -9,14 +9,23 @@ import java.util.function.Consumer;
  */
 public abstract class RunnableObject implements Consumer<BukkitTask> {
 
+    private BukkitTask bukkitTask;
+
     /**
      * Called when the scheduled task is executed.
      *
      * @param bukkitTask the BukkitTask instance
      */
     @Override
-    public abstract void accept(BukkitTask bukkitTask);
+    public void accept(BukkitTask bukkitTask) {
+        this.bukkitTask = bukkitTask;
+    }
 
+    public void cancel() {
+        if (bukkitTask != null) {
+            bukkitTask.cancel();
+        }
+    }
 
     /**
      * Creates a RunnableObject from a Runnable.
