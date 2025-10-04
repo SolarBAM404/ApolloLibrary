@@ -107,11 +107,11 @@ public class CuboidRegion {
     }
 
     public Location getMinimumPoint() {
-        return new Location(null, minX, minY, minZ);
+        return new Location(world, minX, minY, minZ);
     }
 
     public Location getMaximumPoint() {
-        return new Location(null, maxX, maxY, maxZ);
+        return new Location(world, maxX, maxY, maxZ);
     }
 
     @Override
