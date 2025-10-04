@@ -53,4 +53,19 @@ public abstract class ApolloPlugin extends JavaPlugin {
      */
     public abstract void onShutdown();
 
+    public static <T extends ApolloPlugin> T getStaticInstance() {
+        try {
+            Class<?> clazz = ApolloPlugin.class;
+            java.lang.reflect.Field instanceField = clazz.getDeclaredField("instance");
+            if (java.lang.reflect.Modifier.isStatic(instanceField.getModifiers())) {
+                instanceField.setAccessible(true);
+                return (T) instanceField.get(null);
+            }
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            // Handle or log exception as needed
+        }
+        return null;
+    }
+
+
 }
