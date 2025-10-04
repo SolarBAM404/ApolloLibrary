@@ -1,5 +1,5 @@
 name: Apollo Library
-version: '1.0-SNAPSHOT'
+version: '0.3.0'
 main: me.solar.apolloLibrary.ApolloLibrary
 api-version: '1.21'
 prefix: Apollo-Library
