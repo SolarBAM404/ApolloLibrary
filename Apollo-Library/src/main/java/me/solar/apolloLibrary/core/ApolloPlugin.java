@@ -3,6 +3,9 @@ package me.solar.apolloLibrary.core;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
 /**
  * Abstract base class for Apollo plugins.
  */
@@ -56,15 +59,16 @@ public abstract class ApolloPlugin extends JavaPlugin {
     public static <T extends ApolloPlugin> T getStaticInstance() {
         try {
             Class<?> clazz = ApolloPlugin.class;
-            java.lang.reflect.Field instanceField = clazz.getDeclaredField("instance");
-            if (java.lang.reflect.Modifier.isStatic(instanceField.getModifiers())) {
+            Field instanceField = clazz.getDeclaredField("instance");
+            if (Modifier.isStatic(instanceField.getModifiers())) {
                 instanceField.setAccessible(true);
                 return (T) instanceField.get(null);
             }
         } catch (NoSuchFieldException | IllegalAccessException e) {
             // Handle or log exception as needed
+            e.printStackTrace();
         }
-        return null;
+        throw new IllegalStateException("ApolloPlugin instance is not static");
     }
 
 

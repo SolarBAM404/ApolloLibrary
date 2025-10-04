@@ -24,6 +24,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
 import java.util.Collection;
+import java.util.Random;
 
 /**
  * Common utility methods for messaging, plugin checks, and scheduling tasks.
@@ -36,6 +37,8 @@ public class Common {
     private Common() {
         throw new IllegalStateException("Utility class" );
     }
+
+    private static final Random RANDOM = new Random();
 
     // ------------------- Prefixes ------------------ //
 
@@ -339,7 +342,7 @@ public class Common {
     }
 
     public static void callEventLater(int delayTicks, Event event) {
-        RunnableObject.createAndStart(() -> callEvent(event), (long)delayTicks);
+        runTaskLater(ApolloPlugin.getStaticInstance(), () -> callEvent(event), (long)delayTicks);
     }
 
     public static int getRandomInt(int min, int max) {
@@ -441,23 +444,23 @@ public class Common {
     }
 
     public static void registerIncomingPluginMessageListener(String channel, PluginMessageListener listener) {
-        Bukkit.getMessenger().registerIncomingPluginChannel(BaseSparkPlugin.getInstance(), channel, listener);
+        Bukkit.getMessenger().registerIncomingPluginChannel(ApolloPlugin.getStaticInstance(), channel, listener);
     }
 
     public static void registerOutgoingPluginMessageListener(String channel) {
-        Bukkit.getMessenger().registerOutgoingPluginChannel(BaseSparkPlugin.getInstance(), channel);
+        Bukkit.getMessenger().registerOutgoingPluginChannel(ApolloPlugin.getStaticInstance(), channel);
     }
 
     public static void sendPluginMessage(String channel, byte[] message) {
-        Bukkit.getServer().sendPluginMessage(BaseSparkPlugin.getInstance(), channel, message);
+        Bukkit.getServer().sendPluginMessage(ApolloPlugin.getStaticInstance(), channel, message);
     }
 
     public static void sendPluginMessage(Player player, String channel, byte[] message) {
-        player.sendPluginMessage(BaseSparkPlugin.getInstance(), channel, message);
+        player.sendPluginMessage(ApolloPlugin.getStaticInstance(), channel, message);
     }
 
     public static NamespacedKey namespacedKey(String key) {
-        return new NamespacedKey(BaseSparkPlugin.getInstance(), key);
+        return new NamespacedKey(ApolloPlugin.getStaticInstance(), key);
     }
 
 }
