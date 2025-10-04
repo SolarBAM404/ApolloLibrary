@@ -1,5 +1,6 @@
 package me.solar.apolloLibrary;
 
+import com.google.common.collect.Range;
 import lombok.Getter;
 import me.solar.apolloLibrary.core.ApolloPlugin;
 import me.solar.apolloLibrary.exceptions.PluginException;
@@ -9,12 +10,20 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.apache.commons.lang3.NotImplementedException;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.conversations.Conversation;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.util.Vector;
+
+import java.util.Collection;
 
 /**
  * Common utility methods for messaging, plugin checks, and scheduling tasks.
@@ -323,6 +332,132 @@ public class Common {
 
     public static void cancelTask(BukkitTask bukkitTask) {
         bukkitTask.cancel();
+    }
+
+    public static void callEvent(Event event) {
+        Bukkit.getPluginManager().callEvent(event);
+    }
+
+    public static void callEventLater(int delayTicks, Event event) {
+        RunnableObject.createAndStart(() -> callEvent(event), (long)delayTicks);
+    }
+
+    public static int getRandomInt(int min, int max) {
+        return RANDOM.nextInt(max - min + 1) + min;
+    }
+
+    public static int getRandomInt(int max) {
+        return RANDOM.nextInt(max);
+    }
+
+    public static double getRandomDouble(double min, double max) {
+        return RANDOM.nextDouble(min, max);
+    }
+
+    public static double getRandomDouble(double max) {
+        return RANDOM.nextDouble(max);
+    }
+
+    public static float getRandomFloat(float min, float max) {
+        return RANDOM.nextFloat(min, max);
+    }
+
+    public static float getRandomFloat(float max) {
+        return RANDOM.nextFloat(max);
+    }
+
+    public static boolean chance(int percent) {
+        return RANDOM.nextDouble() * (double)100.0F < (double)percent;
+    }
+
+    public static boolean chanceDouble(double percent) {
+        return RANDOM.nextDouble() < percent;
+    }
+
+    public static <T> T getRandomElement(Collection<T> array) {
+        if (array.isEmpty()) {
+            return null;
+        } else if (array.size() == 1) {
+            return (T)array.toArray()[0];
+        } else {
+            int index = getRandomInt(0, array.size() - 1);
+            return (T)array.toArray()[index];
+        }
+    }
+
+    public static <T> T getRandomElement(T[] array) {
+        if (array.length == 0) {
+            return null;
+        } else if (array.length == 1) {
+            return (T)array[0];
+        } else {
+            int index = getRandomInt(0, array.length - 1);
+            return (T)array[index];
+        }
+    }
+
+    public static int getRandomInt(Range<Integer> range) {
+        return RANDOM.nextInt((Integer)range.upperEndpoint() - (Integer)range.lowerEndpoint() + 1) + (Integer)range.lowerEndpoint();
+    }
+
+    public static double getRandomDouble(Range<Double> range) {
+        return RANDOM.nextDouble() * ((Double)range.upperEndpoint() - (Double)range.lowerEndpoint()) + (Double)range.lowerEndpoint();
+    }
+
+    public static boolean getRandomBoolean() {
+        return RANDOM.nextBoolean();
+    }
+
+    public static String convertToString(Location location) {
+        int var10000 = location.getBlockX();
+        return var10000 + "," + location.getBlockY() + "," + location.getBlockZ();
+    }
+
+    public static String convertToString(Location location, boolean includeWorld) {
+        String var10000 = includeWorld ? location.getWorld().getName() + "," : "";
+        return var10000 + convertToString(location);
+    }
+
+    public static float getYawFromVector(Vector direction) {
+        double dx = direction.getX();
+        double dz = direction.getZ();
+        float yaw = (float)Math.toDegrees(Math.atan2(-dx, dz));
+        return yaw < 0.0F ? yaw + 360.0F : yaw;
+    }
+
+    public static float getPitchFromVector(Vector direction) {
+        double dx = direction.getX();
+        double dz = direction.getZ();
+        float pitch = (float)Math.toDegrees(Math.atan2(-dx, dz));
+        return pitch < 0.0F ? pitch + 360.0F : pitch;
+    }
+
+    public static void executeConsoleCommand(String command) {
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+    }
+
+    public static void executePlayerCommand(Player player, String command) {
+        Bukkit.dispatchCommand(player, command);
+    }
+
+    public static void registerIncomingPluginMessageListener(String channel, PluginMessageListener listener) {
+        Bukkit.getMessenger().registerIncomingPluginChannel(BaseSparkPlugin.getInstance(), channel, listener);
+    }
+
+    public static void registerOutgoingPluginMessageListener(String channel) {
+        Bukkit.getMessenger().registerOutgoingPluginChannel(BaseSparkPlugin.getInstance(), channel);
+    }
+
+    public static void sendPluginMessage(String channel, byte[] message) {
+        Bukkit.getServer().sendPluginMessage(BaseSparkPlugin.getInstance(), channel, message);
+    }
+
+    public static void sendPluginMessage(Player player, String channel, byte[] message) {
+        player.sendPluginMessage(BaseSparkPlugin.getInstance(), channel, message);
+    }
+
+    public static NamespacedKey namespacedKey(String key) {
+        return new NamespacedKey(BaseSparkPlugin.getInstance(), key);
     }
 
 }
