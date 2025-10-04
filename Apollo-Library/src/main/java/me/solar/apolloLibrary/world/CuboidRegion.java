@@ -1,10 +1,14 @@
 package me.solar.apolloLibrary.world;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Location;
+import org.bukkit.World;
 
 /**
  * Represents a cuboid region in 3D space.
  */
+@Getter
 public class CuboidRegion {
 
     /** The minimum X coordinate of the region. */
@@ -19,6 +23,8 @@ public class CuboidRegion {
     private final double maxY;
     /** The maximum Z coordinate of the region. */
     private final double maxZ;
+
+    private World world;
 
     /**
      * Constructs a CuboidRegion with specified min and max coordinates.
@@ -37,6 +43,7 @@ public class CuboidRegion {
         this.maxX = maxX;
         this.maxY = maxY;
         this.maxZ = maxZ;
+        this.world = null;
     }
 
     /**
@@ -51,6 +58,7 @@ public class CuboidRegion {
         this.maxX = region.maxX;
         this.maxY = region.maxY;
         this.maxZ = region.maxZ;
+        this.world = region.world;
     }
 
     /**
@@ -62,6 +70,7 @@ public class CuboidRegion {
     public CuboidRegion(Location location, double radius) {
         this(location.getX() - radius, location.getY() - radius, location.getZ() - radius,
                 location.getX() + radius, location.getY() + radius, location.getZ() + radius);
+        this.world = location.getWorld();
     }
 
     /**
@@ -74,6 +83,42 @@ public class CuboidRegion {
         this(Math.min(location1.getX(), location2.getX()), Math.min(location1.getY(), location2.getY()),
                 Math.min(location1.getZ(), location2.getZ()), Math.max(location1.getX(), location2.getX()),
                 Math.max(location1.getY(), location2.getY()), Math.max(location1.getZ(), location2.getZ()));
+        this.world = location1.getWorld();
+    }
+
+    public boolean contains(Location location) {
+        return location.getX() >= minX && location.getX() <= maxX && location.getY() >= minY && location.getY() <= maxY && location.getZ() >= minZ && location.getZ() <= maxZ;
+    }
+
+    public boolean contains(CuboidRegion region) {
+        return region.minX >= minX && region.maxX <= maxX && region.minY >= minY && region.maxY <= maxY && region.minZ >= minZ && region.maxZ <= maxZ;
+    }
+
+    public boolean intersects(CuboidRegion region) {
+        return region.maxX >= minX && region.minX <= maxX && region.maxY >= minY && region.minY <= maxY && region.maxZ >= minZ && region.minZ <= maxZ;
+    }
+
+    public double getVolume() {
+        return (maxX - minX) * (maxY - minY) * (maxZ - minZ);
+    }
+
+    public double getArea() {
+        return (maxX - minX) * (maxZ - minZ);
+    }
+
+    public Location getMinimumPoint() {
+        return new Location(null, minX, minY, minZ);
+    }
+
+    public Location getMaximumPoint() {
+        return new Location(null, maxX, maxY, maxZ);
+    }
+
+    @Override
+    public String toString() {
+        return "CuboidRegion [minX=" + minX + ", minY=" + minY + ", minZ=" + minZ + ", maxX=" + maxX + ", maxY=" + maxY
+                + ", maxZ=" + maxZ + "]";
     }
 
 }
+
