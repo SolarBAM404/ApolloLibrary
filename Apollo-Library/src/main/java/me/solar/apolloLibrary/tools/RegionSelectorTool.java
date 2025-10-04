@@ -3,6 +3,7 @@ package me.solar.apolloLibrary.tools;
 import me.solar.apolloLibrary.ItemStackUtils;
 import me.solar.apolloLibrary.world.CuboidRegion;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -51,6 +52,10 @@ public class RegionSelectorTool extends Tool{
 
     public static CuboidRegion getRegion(UUID uuid) {
         return getInstance().getCuboidRegion(uuid);
+    }
+
+    public static CuboidRegion getRegion(Player player) {
+        return getRegion(player.getUniqueId());
     }
 
     @Override
