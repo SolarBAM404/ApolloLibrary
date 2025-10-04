@@ -80,7 +80,7 @@ public class MathsUtils {
     }
 
     public static double average(Double... values) {
-        Valid.checkBoolean(values.length > 0, "No values given!", new Object[0]);
+        Valid.checkBoolean(values.length > 0, "No values given!");
         double sum = (double)0.0F;
         Double[] var3 = values;
         int var4 = values.length;
@@ -126,7 +126,7 @@ public class MathsUtils {
     }
 
     public static double formatOneDigitD(double value) {
-        Valid.checkBoolean(!Double.isNaN(value), "Value must not be NaN", new Object[0]);
+        Valid.checkBoolean(!Double.isNaN(value), "Value must not be NaN");
         return Double.parseDouble(oneDigitFormat.format(value).replace(",", "."));
     }
 
@@ -135,7 +135,7 @@ public class MathsUtils {
     }
 
     public static double formatTwoDigitsD(double value) {
-        Valid.checkBoolean(!Double.isNaN(value), "Value must not be NaN", new Object[0]);
+        Valid.checkBoolean(!Double.isNaN(value), "Value must not be NaN");
         return Double.parseDouble(twoDigitsFormat.format(value).replace(",", "."));
     }
 
@@ -144,7 +144,7 @@ public class MathsUtils {
     }
 
     public static double formatThreeDigitsD(double value) {
-        Valid.checkBoolean(!Double.isNaN(value), "Value must not be NaN", new Object[0]);
+        Valid.checkBoolean(!Double.isNaN(value), "Value must not be NaN");
         return Double.parseDouble(threeDigitsFormat.format(value).replace(",", "."));
     }
 
@@ -153,7 +153,7 @@ public class MathsUtils {
     }
 
     public static double formatFiveDigitsD(double value) {
-        Valid.checkBoolean(!Double.isNaN(value), "Value must not be NaN", new Object[0]);
+        Valid.checkBoolean(!Double.isNaN(value), "Value must not be NaN");
         return Double.parseDouble(fiveDigitsFormat.format(value).replace(",", "."));
     }
 
