@@ -52,14 +52,14 @@ public abstract class Menu {
         this.inventory = Bukkit.createInventory(null, size, name);
     }
 
-    protected abstract void initialize(Player var1);
+    protected abstract void initialize();
 
     public void open(Player player) {
         if (hasMenu(player)) {
             getMenu(player).close(player);
         }
 
-        this.initialize(player);
+        this.initialize();
         addMenu(this, player);
         player.openInventory(this.inventory);
     }
@@ -70,7 +70,7 @@ public abstract class Menu {
     }
 
     public void update(Player player) {
-        this.initialize(player);
+        this.initialize();
         player.updateInventory();
     }
 
