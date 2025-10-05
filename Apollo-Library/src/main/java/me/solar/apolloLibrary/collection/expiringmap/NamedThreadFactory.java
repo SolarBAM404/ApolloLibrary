@@ -24,7 +24,7 @@
    }
  
    
-   public @NotNull Thread newThread(Runnable r) {
+   public @NotNull Thread newThread(@NotNull Runnable r) {
         Thread thread = new Thread(r, String.format(this.nameFormat, this.threadNumber.getAndIncrement()));
         thread.setDaemon(true);
         return thread;

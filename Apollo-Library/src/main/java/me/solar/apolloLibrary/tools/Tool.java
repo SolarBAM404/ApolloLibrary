@@ -2,6 +2,7 @@ package me.solar.apolloLibrary.tools;
 
 import me.solar.apolloLibrary.utils.Common;
 import me.solar.apolloLibrary.utils.ItemStackUtils;
+import me.solar.apolloLibrary.utils.PlayerUtils;
 import me.solar.apolloLibrary.utils.Valid;
 import me.solar.apolloLibrary.runnables.RunnableObject;
 import org.bukkit.entity.Player;
@@ -24,14 +25,14 @@ public abstract class Tool {
     /**
      * List of all registered tools.
      */
-    private static final List<Tool> tools = new ArrayList();
+    private static final List<Tool> tools = new ArrayList<>();
 
     /**
      * Registers a tool if it is not already registered.
      * @param tool the tool to register
      */
     static void register(Tool tool) {
-        Valid.checkBoolean(!isRegistered(tool), "Tool with itemstack " + String.valueOf(tool.getItem()) + " already registered");
+        Valid.checkBoolean(!isRegistered(tool), "Tool with itemstack " + tool.getItem() + " already registered");
         tools.add(tool);
     }
 
@@ -64,7 +65,7 @@ public abstract class Tool {
      * @return array of registered tools
      */
     public static Tool @NotNull [] getTools() {
-        return (Tool[])tools.toArray(new Tool[tools.size()]);
+        return tools.toArray(new Tool[tools.size()]);
     }
 
     /**
@@ -103,7 +104,7 @@ public abstract class Tool {
      * @return true if the player has this tool in hand
      */
     public final boolean hasToolInHand(@NotNull Player player) {
-        return this.isTool(player.getItemInHand());
+        return this.isTool(PlayerUtils.getItemInMainHand(player));
     }
 
     /**
@@ -211,7 +212,7 @@ public abstract class Tool {
      * @param player the player
      */
     public final void give(@NotNull Player player) {
-        player.getInventory().addItem(new ItemStack[]{this.getItem()});
+        player.getInventory().addItem(this.getItem());
     }
 
     /**

@@ -29,7 +29,7 @@ public class WorldUtils {
 
         for (int i = 0; i <= height; i++) {
             Vector p1 = bottomCorners.get(i).clone();
-            Vector p2 = i + 1 < bottomCorners.size() ? bottomCorners.get(i + 1) : bottomCorners.get(0);
+            Vector p2 = i + 1 < bottomCorners.size() ? bottomCorners.get(i + 1) : bottomCorners.getFirst();
             Vector p3 = p1.add(new Vector(0, height, 0));
             Vector p4 = p2.add(new Vector(0, height, 0));
             vectors.addAll(plotLine(p1, p2));
@@ -194,20 +194,6 @@ public class WorldUtils {
 
     public static boolean isForBlockSelection(Material material) {
         if (material.isBlock() && material != Material.AIR) {
-            try {
-                if (material.isInteractable()) {
-                    return false;
-                }
-            } catch (Throwable var3) {
-            }
-
-            try {
-                if (material.hasGravity()) {
-                    return false;
-                }
-            } catch (Throwable var2) {
-            }
-
             return material.isSolid();
         } else {
             return false;
@@ -215,17 +201,17 @@ public class WorldUtils {
     }
 
     public static FallingBlock shootBlock(Block block, Vector velocity) {
-        return shootBlock(block, velocity, (double)0.0F);
+        return shootBlock(block, velocity, 0.0F);
     }
 
     public static FallingBlock shootBlock(Block block, Vector velocity, double burnOnFallChance) {
         if (!canShootBlock(block)) {
             return null;
         } else {
-            FallingBlock falling = EntityUtils.spawnFallingBlock(block.getLocation().clone().add((double)0.5F, (double)0.0F, (double)0.5F), block.getType());
-            double x = MathsUtils.range(velocity.getX(), (double)-2.0F, (double)2.0F) * (double)0.5F;
+            FallingBlock falling = EntityUtils.spawnFallingBlock(block.getLocation().clone().add(0.5F, 0.0F, 0.5F), block.getType());
+            double x = MathsUtils.range(velocity.getX(), -2.0F, 2.0F) * (double)0.5F;
             double y = Math.random();
-            double z = MathsUtils.range(velocity.getZ(), (double)-2.0F, (double)2.0F) * (double)0.5F;
+            double z = MathsUtils.range(velocity.getZ(), -2.0F, 2.0F) * (double)0.5F;
             falling.setVelocity(new Vector(x, y, z));
             if (Common.chanceDouble(burnOnFallChance) && block.getType().isBurnable()) {
                 scheduleBurnOnFall(falling);
@@ -238,7 +224,7 @@ public class WorldUtils {
     }
 
     public static FallingBlock spawnFallingBlock(Block block, Vector velocity) {
-        FallingBlock falling = EntityUtils.spawnFallingBlock(block.getLocation().clone().add((double)0.5F, (double)0.0F, (double)0.5F), block.getType());
+        FallingBlock falling = EntityUtils.spawnFallingBlock(block.getLocation().clone().add(0.5F, 0.0F, 0.5F), block.getType());
         falling.setVelocity(velocity);
         falling.setDropItem(false);
         block.setType(Material.AIR);

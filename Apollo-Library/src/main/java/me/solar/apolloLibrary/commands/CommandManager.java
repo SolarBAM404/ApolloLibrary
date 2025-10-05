@@ -81,7 +81,7 @@ public class CommandManager implements TabExecutor {
         }
 
         List<String> subArgs = new ArrayList<>(Arrays.asList(args));
-        subArgs.remove(0);
+        subArgs.removeFirst();
         subCommand.onCommand(sender, subArgs);
         return true;
     }
@@ -104,7 +104,7 @@ public class CommandManager implements TabExecutor {
         SubCommand subCommand = getSubcommand(args[0]);
         if (subCommand != null) {
             ArrayList<String> subArgs = new ArrayList<>(Arrays.asList(args));
-            subArgs.remove(0);
+            subArgs.removeFirst();
             try {
                 return subCommand.onTabComplete(sender, subArgs);
             } catch (Exception e) {

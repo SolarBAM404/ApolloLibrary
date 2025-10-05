@@ -10,7 +10,7 @@ public class PresetItems {
 
     public static MenuItem getCloseButton(JavaPlugin plugin, Material material, String name, MenuClickType clickType, String... lore) {
         MenuItem item = new MenuItem(material, name, lore);
-        MenuAction closeAction = (menuEvent) -> Common.runTaskLater(plugin, () -> menuEvent.getPlayer().closeInventory(), 1L);
+        MenuAction closeAction = (menuEvent) -> Common.runTaskLater(plugin, () -> menuEvent.player().closeInventory(), 1L);
         switch (clickType) {
             case LEFT_CLICK:
                 item.withOnClick(closeAction);

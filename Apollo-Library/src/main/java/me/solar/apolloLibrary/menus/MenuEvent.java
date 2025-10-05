@@ -6,51 +6,42 @@ import org.bukkit.event.Event;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class MenuEvent {
-    private final Player player;
-    private final Event event;
-    private final Menu menu;
-    private final ItemStack item;
-    private final MenuClickType clickType;
-
+public record MenuEvent(Player player, Event event, Menu menu, ItemStack item, MenuClickType clickType) {
     public MenuEvent(InventoryClickEvent event) {
-        this((Player)event.getWhoClicked(), event, Menu.getMenu((Player)event.getWhoClicked()), event.getCurrentItem(), MenuClickType.fromClickType(event.getClick()));
+        this((Player) event.getWhoClicked(), event, Menu.getMenu((Player) event.getWhoClicked()), event.getCurrentItem(), MenuClickType.fromClickType(event.getClick()));
     }
 
     public MenuEvent(Player player, Event event, Menu menu, ItemStack item) {
-        this(player, event, menu, item, (MenuClickType)null);
+        this(player, event, menu, item, null);
     }
 
-    public MenuEvent(Player player, Event event, Menu menu, ItemStack item, MenuClickType clickType) {
-        this.player = player;
-        this.event = event;
-        this.menu = menu;
-        this.item = item;
-        this.clickType = clickType;
-    }
-
+    @Override
     @Generated
-    public Player getPlayer() {
+    public Player player() {
         return this.player;
     }
 
+    @Override
     @Generated
-    public Event getEvent() {
+    public Event event() {
         return this.event;
     }
 
+    @Override
     @Generated
-    public Menu getMenu() {
+    public Menu menu() {
         return this.menu;
     }
 
+    @Override
     @Generated
-    public ItemStack getItem() {
+    public ItemStack item() {
         return this.item;
     }
 
+    @Override
     @Generated
-    public MenuClickType getClickType() {
+    public MenuClickType clickType() {
         return this.clickType;
     }
 }

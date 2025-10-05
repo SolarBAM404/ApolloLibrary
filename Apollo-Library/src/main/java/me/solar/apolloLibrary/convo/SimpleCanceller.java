@@ -2,6 +2,7 @@ package me.solar.apolloLibrary.convo;
 
 import java.util.List;
 
+import me.solar.apolloLibrary.utils.Common;
 import me.solar.apolloLibrary.utils.Valid;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationCanceller;
@@ -36,6 +37,7 @@ public class SimpleCanceller
     }
 
     @NotNull
+    @Override
     public ConversationCanceller clone() {
         return new SimpleCanceller(this.cancelPhrases);
     }

@@ -2,6 +2,7 @@ package me.solar.apolloLibrary.utils;
 
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class PlayerUtils {
 
@@ -12,6 +13,35 @@ public class PlayerUtils {
     public static boolean isPlayer(Object object) {
         return object instanceof Player;
     }
+
+    /// Inventory Utilities
+
+    public static void clearInventory(Player player) {
+        player.getInventory().clear();
+    }
+
+    public static ItemStack getItemInMainHand(Player player) {
+        return player.getInventory().getItemInMainHand();
+    }
+
+    public static ItemStack getItemInOffHand(Player player) {
+        return player.getInventory().getItemInOffHand();
+    }
+
+    public static boolean itemInHand(Player player, ItemStack itemStack) {
+        return player.getInventory().getItemInMainHand().equals(itemStack);
+    }
+
+    public static boolean itemInOffHand(Player player, ItemStack itemStack) {
+        return player.getInventory().getItemInOffHand().equals(itemStack);
+    }
+
+    public static boolean itemInEitherHand(Player player, ItemStack itemStack) {
+        return player.getInventory().getItemInMainHand().equals(itemStack) || player.getInventory().getItemInOffHand().equals(itemStack);
+    }
+
+
+    /// Sound Utilities
 
     public static void playSound(Player player, String sound) {
         playSound(player, sound, 1.0F, 1.0F);

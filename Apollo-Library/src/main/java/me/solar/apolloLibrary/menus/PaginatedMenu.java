@@ -10,11 +10,11 @@ public abstract class PaginatedMenu extends Menu {
     private final int maxItemsPerPage;
 
     protected PaginatedMenu(String name, int size) {
-        this((String)name, size, 5);
+        this(name, size, 5);
     }
 
     protected PaginatedMenu(Component name, int size) {
-        this((Component)name, size, 5);
+        this(name, size, 5);
     }
 
     protected PaginatedMenu(String name, int size, int maxItemsPerPage) {
@@ -63,14 +63,14 @@ public abstract class PaginatedMenu extends Menu {
     }
 
     protected MenuItem nextPageItem() {
-        MenuItem nextPageItem = new MenuItem(Material.ARROW, "Next Page", new String[0]);
-        nextPageItem.withOnClick((event) -> this.nextPage(event.getPlayer()));
+        MenuItem nextPageItem = new MenuItem(Material.ARROW, "Next Page");
+        nextPageItem.withOnClick((event) -> this.nextPage(event.player()));
         return nextPageItem;
     }
 
     protected MenuItem previousPageItem() {
-        MenuItem previousPageItem = new MenuItem(Material.ARROW, "Previous Page", new String[0]);
-        previousPageItem.withOnClick((event) -> this.previousPage(event.getPlayer()));
+        MenuItem previousPageItem = new MenuItem(Material.ARROW, "Previous Page");
+        previousPageItem.withOnClick((event) -> this.previousPage(event.player()));
         return previousPageItem;
     }
 

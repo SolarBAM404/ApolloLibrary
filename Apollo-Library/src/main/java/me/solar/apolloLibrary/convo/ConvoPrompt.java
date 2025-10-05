@@ -1,5 +1,6 @@
 package me.solar.apolloLibrary.convo;
 
+import lombok.SneakyThrows;
 import me.solar.apolloLibrary.utils.Common;
 import me.solar.apolloLibrary.utils.Valid;
 import me.solar.apolloLibrary.utils.Variables;
@@ -12,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class ConvoPrompt extends ValidatingPrompt {
-    private boolean openMenu;
+    private final boolean openMenu;
     private Player player;
     private final JavaPlugin plugin;
 
@@ -36,13 +37,9 @@ public abstract class ConvoPrompt extends ValidatingPrompt {
 
     @NotNull
     public String getPromptText(@NotNull ConversationContext context) {
-        try {
-            String prompt = this.getPrompt(context);
+        String prompt = this.getPrompt(context);
 
-            return Variables.replace(prompt, this.getPlayer(context));
-        } catch (Throwable $ex) {
-            throw $ex;
-        }
+        return Variables.replace(prompt, this.getPlayer(context));
     }
 
     private Player getPlayer(@NotNull ConversationContext context) {
@@ -56,16 +53,16 @@ public abstract class ConvoPrompt extends ValidatingPrompt {
     @NotNull
     protected abstract String getPrompt(@NotNull ConversationContext var1);
 
-    public boolean blocksForInput(@NotNull ConversationContext context) {
-        return true;
-    }
-
     protected final void tellLaterNoPrefix(int delayTicks, Conversable conversable, String message) {
         Common.tellLater((Audience) conversable, "{no-prefix}" + message, delayTicks);
     }
 
     @Nullable
     public Prompt acceptInput(@NotNull ConversationContext context, @Nullable String input) {
+        if (input == null) {
+            return this;
+        }
+
         try {
             if (context.getForWhom() == this.player && this.isInputValid(context, input)) {
                 return this.acceptValidatedInput(context, input);
@@ -82,11 +79,6 @@ public abstract class ConvoPrompt extends ValidatingPrompt {
         }
     }
 
-    @Nullable
-    protected String getFailedValidationText(@NotNull ConversationContext context, @NotNull String invalidInput) {
-        return null;
-    }
-
     protected boolean isInputValid(@NotNull ConversationContext context, @NotNull String input) {
         return true;
     }
@@ -94,7 +86,8 @@ public abstract class ConvoPrompt extends ValidatingPrompt {
     public void onConversationEnd(SimpleConversation simpleConversation, @NotNull ConversationAbandonedEvent abandonedEvent) {
     }
 
-    public final Conversation show(Player player) {
+    @SneakyThrows
+    public final @NotNull Conversation show(Player player) {
         try {
             try {
                 Valid.checkBoolean(!player.isConversing(), "Player " + player.getName() + " is already in a conversation!");
@@ -113,9 +106,10 @@ public abstract class ConvoPrompt extends ValidatingPrompt {
 
                 protected ConversationPrefix getPrefix() {
                     String prefix = ConvoPrompt.this.getCustomPrefix();
-                    return (ConversationPrefix)(prefix != null ? new SimplePrefix(prefix) : super.getPrefix());
+                    return prefix != null ? new SimplePrefix(prefix) : super.getPrefix();
                 }
 
+                @SneakyThrows
                 protected void onConversationEnd(@NotNull ConversationAbandonedEvent abandonedEvent, boolean cancelledForInactivity) {
                     try {
                         String message = cancelledForInactivity ? "Conversation was cancelled for inactivity" : "Conversation was ended";
@@ -125,14 +119,14 @@ public abstract class ConvoPrompt extends ValidatingPrompt {
                             Common.tell(player, message);
                         }
 
-                    } catch (Throwable $ex) {
-                        throw $ex;
+                    } catch (Throwable ex) {
+                        throw new ApolloConversationException("Failed to end conversation for player " + ConvoPrompt.this.getPlayer(abandonedEvent.getContext()).getName(), ex);
                     }
                 }
             };
             return conversation.start(player);
-        } catch (Throwable $ex) {
-            throw $ex;
+        } catch (Throwable ex) {
+            throw new ApolloConversationException("Failed to start conversation for player " + player.getName(), ex);
         }
     }
 

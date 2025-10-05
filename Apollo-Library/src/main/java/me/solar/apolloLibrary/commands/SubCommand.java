@@ -69,7 +69,7 @@ public abstract class SubCommand {
      * @param args   List of arguments provided along with the subcommand.
      */
     public void onCommand(@NotNull CommandSender sender, @NotNull List<String> args) {
-        SubCommand command = getSubCommand(args.get(0));
+        SubCommand command = getSubCommand(args.getFirst());
         if (command != null) {
             List<String> newArgs = new ArrayList<>(args);
             newArgs.removeFirst();
@@ -91,14 +91,14 @@ public abstract class SubCommand {
             List<String> subCommandNames = getSubCommandNames();
             List<String> suggestions = new ArrayList<>();
             for (String subCommandName : subCommandNames) {
-                if (subCommandName.startsWith(args.get(0))) {
+                if (subCommandName.startsWith(args.getFirst())) {
                     suggestions.add(subCommandName);
                 }
             }
             return suggestions;
         }
 
-        SubCommand subCommand = getSubcommand(args.get(0));
+        SubCommand subCommand = getSubcommand(args.getFirst());
         if (subCommand != null) {
             ArrayList<String> subArgs = new ArrayList<>(args);
             subArgs.removeFirst();

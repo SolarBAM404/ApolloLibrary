@@ -25,7 +25,7 @@ public class ToolListener implements Listener {
     )
     public void onToolClick(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        Tool tool = Tool.getTool(player.getItemInHand());
+        Tool tool = Tool.getTool(player.getInventory().getItemInMainHand());
         if (tool != null) {
             try {
                 tool.onBlockClick(event);
@@ -49,7 +49,7 @@ public class ToolListener implements Listener {
     )
     public void onToolPlaceBlock(BlockPlaceEvent event) {
         Player player = event.getPlayer();
-        Tool tool = Tool.getTool(player.getItemInHand());
+        Tool tool = Tool.getTool(player.getInventory().getItemInMainHand());
         if (tool != null) {
             try {
                 tool.onBlockPlace(event);
@@ -96,7 +96,7 @@ public class ToolListener implements Listener {
     )
     public void onPlayerDisconnect(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        Tool tool = Tool.getTool(player.getItemInHand());
+        Tool tool = Tool.getTool(player.getInventory().getItemInMainHand());
         if (tool != null) {
             tool.shutdown(event.getPlayer());
         }

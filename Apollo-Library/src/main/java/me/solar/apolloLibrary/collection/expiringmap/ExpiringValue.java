@@ -10,15 +10,15 @@ public final class ExpiringValue<V> {
     private final TimeUnit timeUnit;
 
     public ExpiringValue(V value) {
-        this(value, -1L, (TimeUnit)null, (ExpirationPolicy)null);
+        this(value, -1L, null, null);
     }
 
     public ExpiringValue(V value, ExpirationPolicy expirationPolicy) {
-        this(value, -1L, (TimeUnit)null, expirationPolicy);
+        this(value, -1L, null, expirationPolicy);
     }
 
     public ExpiringValue(V value, long duration, TimeUnit timeUnit) {
-        this(value, duration, timeUnit, (ExpirationPolicy)null);
+        this(value, duration, timeUnit, null);
         if (timeUnit == null) {
             throw new NullPointerException();
         }
@@ -88,6 +88,6 @@ public final class ExpiringValue<V> {
 
     public String toString() {
         String var10000 = String.valueOf(this.value);
-        return "ExpiringValue{value=" + var10000 + ", expirationPolicy=" + String.valueOf(this.expirationPolicy) + ", duration=" + this.duration + ", timeUnit=" + String.valueOf(this.timeUnit) + "}";
+        return "ExpiringValue{value=" + var10000 + ", expirationPolicy=" + this.expirationPolicy + ", duration=" + this.duration + ", timeUnit=" + this.timeUnit + "}";
     }
 }

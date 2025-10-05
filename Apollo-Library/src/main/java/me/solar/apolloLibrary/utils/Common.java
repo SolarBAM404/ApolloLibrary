@@ -242,7 +242,7 @@ public class Common {
         Plugin lookup = null;
 
         for (final Plugin otherPlugin : Bukkit.getPluginManager().getPlugins())
-            if (otherPlugin.getDescription().getName().equals(pluginName)) {
+            if (otherPlugin.getPluginMeta().getName().equals(pluginName)) {
                 lookup = otherPlugin;
 
                 break;
@@ -343,7 +343,7 @@ public class Common {
     }
 
     public static void callEventLater(int delayTicks, Event event) {
-        runTaskLater(ApolloPlugin.getStaticInstance(), () -> callEvent(event), (long)delayTicks);
+        runTaskLater(ApolloPlugin.getStaticInstance(), () -> callEvent(event), delayTicks);
     }
 
     public static int getRandomInt(int min, int max) {
@@ -393,19 +393,19 @@ public class Common {
         if (array.length == 0) {
             return null;
         } else if (array.length == 1) {
-            return (T)array[0];
+            return array[0];
         } else {
             int index = getRandomInt(0, array.length - 1);
-            return (T)array[index];
+            return array[index];
         }
     }
 
     public static int getRandomInt(Range<Integer> range) {
-        return RANDOM.nextInt((Integer)range.upperEndpoint() - (Integer)range.lowerEndpoint() + 1) + (Integer)range.lowerEndpoint();
+        return RANDOM.nextInt(range.upperEndpoint() - range.lowerEndpoint() + 1) + range.lowerEndpoint();
     }
 
     public static double getRandomDouble(Range<Double> range) {
-        return RANDOM.nextDouble() * ((Double)range.upperEndpoint() - (Double)range.lowerEndpoint()) + (Double)range.lowerEndpoint();
+        return RANDOM.nextDouble() * (range.upperEndpoint() - range.lowerEndpoint()) + range.lowerEndpoint();
     }
 
     public static boolean getRandomBoolean() {

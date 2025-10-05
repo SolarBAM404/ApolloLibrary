@@ -3,35 +3,39 @@ package me.solar.apolloLibrary.utils;
 
 import org.bukkit.util.Vector;
 
+import java.io.Serial;
 import java.text.DecimalFormat;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.NavigableMap;
-import java.util.TreeMap;
+import java.util.*;
 
 public class MathsUtils {
     private static final DecimalFormat oneDigitFormat = new DecimalFormat("#.#");
     private static final DecimalFormat twoDigitsFormat = new DecimalFormat("#.##");
     private static final DecimalFormat threeDigitsFormat = new DecimalFormat("#.###");
     private static final DecimalFormat fiveDigitsFormat = new DecimalFormat("#.#####");
-    private static final NavigableMap<Integer, String> romanNumbers = new TreeMap();
+    private static final NavigableMap<Integer, String> romanNumbers = new TreeMap<>();
 
     public static String toRoman(int number) {
         if (number == 0) {
             return "0";
         } else {
-            int literal = (Integer)romanNumbers.floorKey(number);
+            int literal = romanNumbers.floorKey(number);
             if (number == literal) {
-                return (String)romanNumbers.get(number);
+                return romanNumbers.get(number);
             } else {
-                String var10000 = (String)romanNumbers.get(literal);
+                String var10000 = romanNumbers.get(literal);
                 return var10000 + toRoman(number - literal);
             }
         }
     }
 
     public static int max(int... numbers) {
-        return Arrays.stream(numbers).max().getAsInt();
+        OptionalInt max = Arrays.stream(numbers).max();
+
+        if (max.isEmpty()) {
+            throw new IllegalArgumentException("No numbers given!");
+        }
+
+        return max.getAsInt();
     }
 
     public static long floor(double d1) {
@@ -40,8 +44,7 @@ public class MathsUtils {
     }
 
     public static long ceiling(double f1) {
-        long i = (long)f1;
-        return f1 >= (double)i ? i : i - 1L;
+        return floor(f1);
     }
 
     public static double range(double value, double min, double max) {
@@ -53,17 +56,16 @@ public class MathsUtils {
     }
 
     public static double atLeast(double value, double min) {
-        return value > min ? value : min;
+        return Math.max(value, min);
     }
 
     public static int atLeast(int value, int min) {
-        return value > min ? value : min;
+        return Math.max(value, min);
     }
 
     public static int increase(int number, double percent) {
-        double myNumber = (double)number;
-        double percentage = myNumber / (double)100.0F * percent;
-        return (int)Math.round(myNumber + percentage);
+        double percentage = (double) number / (double)100.0F * percent;
+        return (int)Math.round((double) number + percentage);
     }
 
     public static double increase(double number, double percent) {
@@ -76,17 +78,15 @@ public class MathsUtils {
     }
 
     public static double average(Collection<Double> values) {
-        return average((Double[])values.toArray(new Double[values.size()]));
+        return average(values.toArray(new Double[0]));
     }
 
     public static double average(Double... values) {
         Valid.checkBoolean(values.length > 0, "No values given!");
-        double sum = (double)0.0F;
-        Double[] var3 = values;
-        int var4 = values.length;
+        double sum = 0.0F;
+        int length = values.length;
 
-        for(int var5 = 0; var5 < var4; ++var5) {
-            double val = var3[var5];
+        for (double val : values) {
             sum += val;
         }
 
@@ -248,7 +248,7 @@ public class MathsUtils {
                         this.eatChar();
                     }
 
-                    if (sb.length() == 0) {
+                    if (sb.isEmpty()) {
                         throw new CalculatorException("Unexpected: " + (char)this.c);
                     }
 
@@ -289,6 +289,7 @@ public class MathsUtils {
     }
 
     public static final class CalculatorException extends RuntimeException {
+        @Serial
         private static final long serialVersionUID = 1L;
 
         public CalculatorException(String message) {

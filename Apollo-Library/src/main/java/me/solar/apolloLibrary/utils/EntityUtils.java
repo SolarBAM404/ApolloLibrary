@@ -36,7 +36,7 @@ public class EntityUtils {
         try {
             return location.getWorld().getNearbyEntities(location, radius, radius, radius);
         } catch (Throwable var7) {
-            List<Entity> found = new ArrayList();
+            List<Entity> found = new ArrayList<>();
 
             for(Entity nearby : location.getWorld().getEntities()) {
                 if (nearby.getLocation().distance(location) <= radius) {
@@ -49,16 +49,17 @@ public class EntityUtils {
     }
 
     public static <T extends LivingEntity> T findNearestEntity(Location center, double range3D, Class<T> entityClass) {
-        List<T> found = new ArrayList();
+        List<T> found = new ArrayList<>();
 
         for(Entity nearby : getNearbyEntities(center, range3D)) {
-            if (nearby instanceof LivingEntity && entityClass.isAssignableFrom(nearby.getClass())) {
+            if (entityClass.isAssignableFrom(nearby.getClass())) {
+                //noinspection unchecked
                 found.add((T) nearby);
             }
         }
 
-        Collections.sort(found, (first, second) -> Double.compare(first.getLocation().distance(center), second.getLocation().distance(center)));
-        return (T)(found.isEmpty() ? null : (LivingEntity)found.get(0));
+        found.sort(Comparator.comparingDouble(t -> t.getLocation().distance(center)));
+        return found.isEmpty() ? null : found.getFirst();
     }
 
     public static Player getTargetPlayer(Entity entity) {
@@ -73,11 +74,8 @@ public class EntityUtils {
     public static Entity getTarget(Entity entity) {
         Entity target = null;
 
-        try {
-            if (entity instanceof Mob) {
-                target = ((Mob)entity).getTarget();
-            }
-        } catch (Throwable var3) {
+        if (entity instanceof Mob) {
+            target = ((Mob)entity).getTarget();
         }
 
         if (target == null && entity instanceof Creature) {
@@ -93,12 +91,12 @@ public class EntityUtils {
 
     public static double getDefaultHealth(EntityType type) {
         if (type == EntityType.PLAYER) {
-            return (double)20.0F;
+            return 20.0F;
         } else {
-            Location location = ((World) Bukkit.getWorlds().get(0)).getSpawnLocation();
-            location.setY((double)0.0F);
+            Location location = Bukkit.getWorlds().getFirst().getSpawnLocation();
+            location.setY(0.0F);
             Entity entity = location.getWorld().spawnEntity(location, type);
-            Valid.checkBoolean(entity instanceof LivingEntity, "Cannot use getDefaultHealth for non-living entity: " + String.valueOf(type));
+            Valid.checkBoolean(entity instanceof LivingEntity, "Cannot use getDefaultHealth for non-living entity: " + type);
             double health = getHealth((LivingEntity)entity);
             entity.remove();
             return health;
@@ -119,15 +117,8 @@ public class EntityUtils {
             copyOf.remove();
         }
 
-        try {
-            for(Entity passenger : entity.getPassengers()) {
-                passenger.remove();
-            }
-        } catch (NoSuchMethodError var4) {
-            Entity passenger = entity.getPassenger();
-            if (passenger != null) {
-                passenger.remove();
-            }
+        for(Entity passenger : entity.getPassengers()) {
+            passenger.remove();
         }
 
     }
@@ -137,7 +128,7 @@ public class EntityUtils {
             if (entity instanceof Wolf && ((Wolf)entity).isAngry()) {
                 return true;
             } else {
-                return entity instanceof Animals ? false : entity instanceof Creature;
+                return !(entity instanceof Animals) && entity instanceof Creature;
             }
         } else {
             return true;
@@ -145,7 +136,7 @@ public class EntityUtils {
     }
 
     public static boolean isCreature(Entity entity) {
-        return entity instanceof Slime || entity instanceof Wolf || entity instanceof Creature;
+        return entity instanceof Slime || entity instanceof Creature;
     }
 
     public static boolean canBeCleaned(Entity entity) {
@@ -157,11 +148,11 @@ public class EntityUtils {
     }
 
     public static void trackFalling(Entity entity, Runnable hitGroundListener) {
-        track(entity, 600, (Runnable)null, hitGroundListener);
+        track(entity, 600, null, hitGroundListener);
     }
 
     public static void trackFlying(Entity entity, Runnable flyListener) {
-        track(entity, 600, flyListener, (Runnable)null);
+        track(entity, 600, flyListener, null);
     }
 
     public static void track(final Entity entity, int timeoutTicks, final Runnable flyListener, final Runnable hitGroundListener) {

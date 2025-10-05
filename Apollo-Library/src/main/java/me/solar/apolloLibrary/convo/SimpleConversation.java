@@ -1,6 +1,7 @@
 package me.solar.apolloLibrary.convo;
 
 import lombok.Generated;
+import lombok.SneakyThrows;
 import me.solar.apolloLibrary.utils.Common;
 import me.solar.apolloLibrary.utils.PlayerUtils;
 import me.solar.apolloLibrary.utils.Valid;
@@ -20,9 +21,9 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class SimpleConversation implements ConversationAbandonedListener {
     private Menu menu;
-    private JavaPlugin plugin;
+    private final JavaPlugin plugin;
     public SimpleConversation(JavaPlugin plugin) {
-        this(plugin, (Menu)null);
+        this(plugin, null);
     }
 
     public SimpleConversation(JavaPlugin plugin, Menu menu) {
@@ -30,6 +31,7 @@ public abstract class SimpleConversation implements ConversationAbandonedListene
         this.menu = menu;
     }
 
+    @SneakyThrows
     public final CustomConversation start(Player player) {
         try {
             try {
@@ -47,8 +49,8 @@ public abstract class SimpleConversation implements ConversationAbandonedListene
             conversation.addConversationAbandonedListener(this);
             conversation.begin();
             return conversation;
-        } catch (Throwable $ex) {
-            throw $ex;
+        } catch (Throwable e) {
+            throw new ApolloConversationException("An error occurred while starting the conversation", e);
         }
     }
 
@@ -87,14 +89,15 @@ public abstract class SimpleConversation implements ConversationAbandonedListene
     }
 
     protected ConversationCanceller getCanceller() {
-        return new SimpleCanceller(new String[]{"quit", "exit", "cancel"});
+        return new SimpleCanceller("quit", "exit", "cancel");
     }
 
+    @SneakyThrows
     protected ConversationPrefix getPrefix() {
         try {
             return new SimplePrefix("");
-        } catch (Throwable $ex) {
-            throw $ex;
+        } catch (Throwable e) {
+            throw new ApolloConversationException("An error occurred while getting the conversation prefix", e);
         }
     }
 
@@ -119,7 +122,7 @@ public abstract class SimpleConversation implements ConversationAbandonedListene
     }
 
     protected final void tellBoxed(int delayTicks, Conversable conversable, String... messages) {
-        Common.runTaskLater(plugin, () -> tellBoxed(conversable, messages), (long)delayTicks);
+        Common.runTaskLater(plugin, () -> tellBoxed(conversable, messages), delayTicks);
     }
 
     protected final void tellBoxed(Conversable conversable, String... messages) {
@@ -131,7 +134,7 @@ public abstract class SimpleConversation implements ConversationAbandonedListene
     }
 
     protected final void tellLater(int delayTicks, Conversable conversable, String message) {
-        Common.runTaskLater(plugin, () -> tell(conversable, message), (long)delayTicks);
+        Common.runTaskLater(plugin, () -> tell(conversable, message), delayTicks);
     }
 
     @Generated
@@ -140,7 +143,7 @@ public abstract class SimpleConversation implements ConversationAbandonedListene
     }
 
     final class CustomCanceller implements ConversationCanceller {
-        protected Conversation conversation;
+        private Conversation conversation;
         private final int timeoutSeconds = SimpleConversation.this.getTimeoutSeconds();
         private RunnableObject task;
 
@@ -152,13 +155,15 @@ public abstract class SimpleConversation implements ConversationAbandonedListene
             this.startTimer();
         }
 
-        public boolean cancelBasedOnInput(ConversationContext context, String input) {
+        public boolean cancelBasedOnInput(@NotNull ConversationContext context, @NotNull String input) {
             this.stopTimer();
             this.startTimer();
             return false;
         }
 
-        public ConversationCanceller clone() {
+        @SneakyThrows
+        public @NotNull ConversationCanceller clone() {
+            ConversationCanceller canceller = (ConversationCanceller) super.clone();
             return SimpleConversation.this.new CustomCanceller();
         }
 
@@ -196,6 +201,7 @@ public abstract class SimpleConversation implements ConversationAbandonedListene
 
         }
 
+        @SneakyThrows
         public void outputNextPrompt() {
             try {
                 if (this.currentPrompt == null) {
@@ -205,7 +211,8 @@ public abstract class SimpleConversation implements ConversationAbandonedListene
                         String message = "<red>An error occurred while processing the conversation. Please try again";
 
                         Common.tell((Audience) this.getForWhom(), message);
-                        e.printStackTrace();
+                        Common.log("<red>An error occurred while processing the conversation. Please try again");
+                        Common.log(e.getMessage());
                     }
 
                 } else {
@@ -213,13 +220,21 @@ public abstract class SimpleConversation implements ConversationAbandonedListene
                     String question = this.currentPrompt.getPromptText(this.context);
 
                     try {
-                        ExpiringMap<String, Void> askedQuestions = (ExpiringMap)this.context.getAllSessionData().getOrDefault("Asked_" + promptClass, ExpiringMap.builder().expiration((long)SimpleConversation.this.getTimeoutSeconds(), TimeUnit.SECONDS).build());
+                        Object sessionData = this.context.getSessionData("Asked_" + promptClass);
+                        if (!(sessionData instanceof ExpiringMap)) {
+                            sessionData = ExpiringMap.builder().expiration(SimpleConversation.this.getTimeoutSeconds(), TimeUnit.SECONDS).build();
+                            this.context.setSessionData("Asked_" + promptClass, sessionData);
+                        }
+                        @SuppressWarnings("unchecked") ExpiringMap<String, Void> askedQuestions = (ExpiringMap<String, Void>) sessionData;
                         if (!askedQuestions.containsKey(question)) {
                             askedQuestions.put(question, null);
                             this.context.setSessionData("Asked_" + promptClass, askedQuestions);
                             Common.tell((Audience)this.getForWhom(), question);
                         }
-                    } catch (NoSuchMethodError var4) {
+                    } catch (NoSuchMethodError | ClassCastException e) {
+                        Common.tell((Audience)this.getForWhom(), question);
+                        Common.log("<red>An error occurred while processing the conversation. Please try again");
+                        Common.log(e.getMessage());
                     }
 
                     if (this.currentPrompt instanceof ConvoPrompt) {
@@ -227,13 +242,13 @@ public abstract class SimpleConversation implements ConversationAbandonedListene
                     }
 
                     if (!this.currentPrompt.blocksForInput(this.context)) {
-                        this.currentPrompt = this.currentPrompt.acceptInput(this.context, (String)null);
+                        this.currentPrompt = this.currentPrompt.acceptInput(this.context, null);
                         this.outputNextPrompt();
                     }
 
                 }
-            } catch (Throwable $ex) {
-                throw $ex;
+            } catch (Throwable e) {
+                throw new ApolloConversationException("An error occurred while processing the conversation", e);
             }
         }
 

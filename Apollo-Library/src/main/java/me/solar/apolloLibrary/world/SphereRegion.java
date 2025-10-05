@@ -61,8 +61,7 @@ public class SphereRegion implements Region {
         // Use bounding-box overlap as a fast path
         if (!this.getBoundingBox().overlaps(other.getBoundingBox())) return false;
 
-        if (other instanceof SphereRegion) {
-            SphereRegion o = (SphereRegion) other;
+        if (other instanceof SphereRegion o) {
             double d = center.distance(o.center);
             return d <= (this.radius + o.radius);
         } else if (other instanceof CuboidRegion) {
@@ -85,14 +84,14 @@ public class SphereRegion implements Region {
     @Override
     public List<Location> getPoints() {
         // A sphere is defined by center & radius, but for tool support, return axis-aligned cardinal points
-        return Collections.unmodifiableList(List.of(
+        return List.of(
                 new Location(center.getWorld(), center.getX() + radius, center.getY(), center.getZ()),
                 new Location(center.getWorld(), center.getX() - radius, center.getY(), center.getZ()),
                 new Location(center.getWorld(), center.getX(), center.getY() + radius, center.getZ()),
                 new Location(center.getWorld(), center.getX(), center.getY() - radius, center.getZ()),
                 new Location(center.getWorld(), center.getX(), center.getY(), center.getZ() + radius),
                 new Location(center.getWorld(), center.getX(), center.getY(), center.getZ() - radius)
-        ));
+        );
     }
 
     @Override
@@ -114,8 +113,7 @@ public class SphereRegion implements Region {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof SphereRegion)) return false;
-        SphereRegion o = (SphereRegion) obj;
+        if (!(obj instanceof SphereRegion o)) return false;
         return center.equals(o.center) && radius == o.radius && id.equals(o.id);
     }
 

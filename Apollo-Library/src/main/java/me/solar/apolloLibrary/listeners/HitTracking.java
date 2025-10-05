@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class HitTracking implements Listener {
-    private static ExpiringMap<UUID, List<Consumer<ProjectileHitEvent>>> flyingProjectiles;
+    private static final ExpiringMap<UUID, List<Consumer<ProjectileHitEvent>>> flyingProjectiles;
 
     @EventHandler(
             priority = EventPriority.HIGHEST

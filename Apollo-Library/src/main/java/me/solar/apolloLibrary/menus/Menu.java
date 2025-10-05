@@ -19,7 +19,7 @@ import java.util.Map;
 
 public abstract class Menu {
 
-    private static final Map<Player, Menu> menus = new HashMap();
+    private static final Map<Player, Menu> menus = new HashMap<>();
     private final Component name;
     protected final Inventory inventory;
     private final Map<Integer, MenuItem> menuItems = new HashMap<>();
@@ -34,7 +34,7 @@ public abstract class Menu {
     }
 
     public static Menu getMenu(Player player) {
-        return (Menu)menus.get(player);
+        return menus.get(player);
     }
 
     public static boolean hasMenu(Player player) {

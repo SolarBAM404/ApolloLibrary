@@ -45,8 +45,8 @@ public class MenuItem extends ItemStack{
     }
 
     public void execute(MenuEvent event) {
-        if (event.getClickType() != null) {
-            MenuAction action = this.getClickAction(event.getClickType());
+        if (event.clickType() != null) {
+            MenuAction action = this.getClickAction(event.clickType());
             if (action != null) {
                 action.execute(event);
             }
@@ -55,29 +55,16 @@ public class MenuItem extends ItemStack{
     }
 
     public MenuAction getClickAction(MenuClickType clickType) {
-        MenuAction var10000;
-        switch (clickType) {
-            case LEFT_CLICK:
-                var10000 = this.onLeftClick;
-                break;
-            case RIGHT_CLICK:
-                var10000 = this.onRightClick;
-                break;
-            case MIDDLE_CLICK:
-                var10000 = this.onMiddleClick;
-                break;
-            case SHIFT_LEFT_CLICK:
-                var10000 = this.onShiftLeftClick;
-                break;
-            case SHIFT_RIGHT_CLICK:
-                var10000 = this.onShiftRightClick;
-                break;
-            case null:
-            default:
-                var10000 = null;
-        }
+        MenuAction action = switch (clickType) {
+            case LEFT_CLICK -> this.onLeftClick;
+            case RIGHT_CLICK -> this.onRightClick;
+            case MIDDLE_CLICK -> this.onMiddleClick;
+            case SHIFT_LEFT_CLICK -> this.onShiftLeftClick;
+            case SHIFT_RIGHT_CLICK -> this.onShiftRightClick;
+            case null, default -> null;
+        };
 
-        return var10000;
+        return action;
     }
 
     public boolean equals(Object o) {
@@ -96,7 +83,7 @@ public class MenuItem extends ItemStack{
     }
 
     public int hashCode() {
-        return Objects.hash(new Object[]{super.hashCode(), this.onLeftClick, this.onRightClick, this.onMiddleClick, this.onShiftLeftClick, this.onShiftRightClick});
+        return Objects.hash(super.hashCode(), this.onLeftClick, this.onRightClick, this.onMiddleClick, this.onShiftLeftClick, this.onShiftRightClick);
     }
 
 }
