@@ -1,8 +1,8 @@
 package me.solar.apolloLibrary.menus;
 
 import lombok.Generated;
-import me.solar.apolloLibrary.Common;
-import me.solar.apolloLibrary.ItemStackUtils;
+import me.solar.apolloLibrary.utils.Common;
+import me.solar.apolloLibrary.utils.ItemStackUtils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -12,7 +12,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;

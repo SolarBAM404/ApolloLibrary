@@ -1,7 +1,8 @@
-package me.solar.apolloLibrary;
+package me.solar.apolloLibrary.utils;
 
 import com.google.common.collect.Range;
 import lombok.Getter;
+import me.solar.apolloLibrary.ApolloLibrary;
 import me.solar.apolloLibrary.core.ApolloPlugin;
 import me.solar.apolloLibrary.exceptions.PluginException;
 import me.solar.apolloLibrary.runnables.RunnableObject;

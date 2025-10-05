@@ -2,7 +2,7 @@ package me.solar.apolloLibrary.convo;
 
 import java.util.List;
 
-import me.solar.apolloLibrary.Valid;
+import me.solar.apolloLibrary.utils.Valid;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationCanceller;
 import org.bukkit.conversations.ConversationContext;

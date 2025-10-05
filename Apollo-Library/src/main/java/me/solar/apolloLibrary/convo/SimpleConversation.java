@@ -1,9 +1,9 @@
 package me.solar.apolloLibrary.convo;
 
 import lombok.Generated;
-import me.solar.apolloLibrary.Common;
-import me.solar.apolloLibrary.PlayerUtils;
-import me.solar.apolloLibrary.Valid;
+import me.solar.apolloLibrary.utils.Common;
+import me.solar.apolloLibrary.utils.PlayerUtils;
+import me.solar.apolloLibrary.utils.Valid;
 import me.solar.apolloLibrary.collection.expiringmap.ExpiringMap;
 import me.solar.apolloLibrary.menus.Menu;
 import me.solar.apolloLibrary.runnables.RunnableObject;

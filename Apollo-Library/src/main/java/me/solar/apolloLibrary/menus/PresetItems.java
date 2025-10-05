@@ -1,6 +1,6 @@
 package me.solar.apolloLibrary.menus;
 
-import me.solar.apolloLibrary.Common;
+import me.solar.apolloLibrary.utils.Common;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 

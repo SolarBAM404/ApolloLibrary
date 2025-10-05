@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import me.solar.apolloLibrary.Common;
+import me.solar.apolloLibrary.utils.Common;
 import me.solar.apolloLibrary.exceptions.ApolloCommandException;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;

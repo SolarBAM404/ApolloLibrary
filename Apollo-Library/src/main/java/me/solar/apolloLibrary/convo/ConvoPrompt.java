@@ -1,8 +1,8 @@
 package me.solar.apolloLibrary.convo;
 
-import me.solar.apolloLibrary.Common;
-import me.solar.apolloLibrary.Valid;
-import me.solar.apolloLibrary.Variables;
+import me.solar.apolloLibrary.utils.Common;
+import me.solar.apolloLibrary.utils.Valid;
+import me.solar.apolloLibrary.utils.Variables;
 import net.kyori.adventure.audience.Audience;
 import org.apache.commons.lang3.SerializationException;
 import org.bukkit.conversations.*;

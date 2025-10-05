@@ -1,6 +1,6 @@
 package me.solar.apolloLibrary.runnables.timerTasks;
 
-import me.solar.apolloLibrary.Common;
+import me.solar.apolloLibrary.utils.Common;
 import org.bukkit.entity.Player;
 
 /**

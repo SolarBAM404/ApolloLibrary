@@ -1,6 +1,6 @@
 package me.solar.apolloLibrary.tools;
 
-import me.solar.apolloLibrary.ItemStackUtils;
+import me.solar.apolloLibrary.utils.ItemStackUtils;
 import me.solar.apolloLibrary.world.CuboidRegion;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

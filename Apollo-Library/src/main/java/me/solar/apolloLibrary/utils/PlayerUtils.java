@@ -1,4 +1,4 @@
-package me.solar.apolloLibrary;
+package me.solar.apolloLibrary.utils;
 
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;

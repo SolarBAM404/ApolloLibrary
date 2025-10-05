@@ -1,4 +1,4 @@
-package me.solar.apolloLibrary;
+package me.solar.apolloLibrary.utils;
 
 
 import org.bukkit.util.Vector;

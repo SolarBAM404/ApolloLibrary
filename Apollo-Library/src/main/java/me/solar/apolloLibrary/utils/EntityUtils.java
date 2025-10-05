@@ -1,4 +1,4 @@
-package me.solar.apolloLibrary;
+package me.solar.apolloLibrary.utils;
 
 import me.solar.apolloLibrary.core.ApolloPlugin;
 import me.solar.apolloLibrary.listeners.HitTracking;

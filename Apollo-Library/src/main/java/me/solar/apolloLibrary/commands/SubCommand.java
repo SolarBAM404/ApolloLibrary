@@ -1,11 +1,10 @@
 package me.solar.apolloLibrary.commands;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import lombok.Getter;
-import me.solar.apolloLibrary.Common;
+import me.solar.apolloLibrary.utils.Common;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;

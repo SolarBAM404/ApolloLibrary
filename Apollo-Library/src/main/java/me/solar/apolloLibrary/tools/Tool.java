@@ -1,8 +1,8 @@
 package me.solar.apolloLibrary.tools;
 
-import me.solar.apolloLibrary.Common;
-import me.solar.apolloLibrary.ItemStackUtils;
-import me.solar.apolloLibrary.Valid;
+import me.solar.apolloLibrary.utils.Common;
+import me.solar.apolloLibrary.utils.ItemStackUtils;
+import me.solar.apolloLibrary.utils.Valid;
 import me.solar.apolloLibrary.runnables.RunnableObject;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;

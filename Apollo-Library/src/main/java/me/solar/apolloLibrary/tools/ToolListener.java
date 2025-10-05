@@ -1,6 +1,6 @@
 package me.solar.apolloLibrary.tools;
 
-import me.solar.apolloLibrary.Common;
+import me.solar.apolloLibrary.utils.Common;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
