@@ -463,4 +463,13 @@ public class Common {
         return new NamespacedKey(ApolloPlugin.getStaticInstance(), key);
     }
 
+    public static String[] locationToStringArray(Location location) {
+        return new String[] {
+                location.getWorld().getName(),
+                String.valueOf(location.getBlockX()),
+                String.valueOf(location.getBlockY()),
+                String.valueOf(location.getBlockZ())
+        };
+    }
+
 }
