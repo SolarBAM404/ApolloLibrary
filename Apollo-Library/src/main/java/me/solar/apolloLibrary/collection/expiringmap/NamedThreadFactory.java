@@ -1,4 +1,4 @@
- package org.sparkblock.net.sparkypaper.collection.expiringmap;
+ package me.solar.apolloLibrary.collection.expiringmap;
  
  import java.util.concurrent.ThreadFactory;
  import java.util.concurrent.atomic.AtomicInteger;
