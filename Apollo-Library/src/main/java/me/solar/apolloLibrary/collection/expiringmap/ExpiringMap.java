@@ -1,7 +1,7 @@
 package me.solar.apolloLibrary.collection.expiringmap;
 
 import lombok.NonNull;
-import me.solar.apolloLibrary.Valid;
+import me.solar.apolloLibrary.utils.Valid;
 
 import java.lang.ref.WeakReference;
 import java.util.*;
