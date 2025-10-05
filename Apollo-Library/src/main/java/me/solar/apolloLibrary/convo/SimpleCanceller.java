@@ -2,25 +2,21 @@ package me.solar.apolloLibrary.convo;
 
 import java.util.List;
 
-import me.solar.apolloLibrary.utils.Common;
 import me.solar.apolloLibrary.utils.Valid;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationCanceller;
 import org.bukkit.conversations.ConversationContext;
 import org.jetbrains.annotations.NotNull;
 
-public class SimpleCanceller
+public record SimpleCanceller(List<String> cancelPhrases)
         implements ConversationCanceller {
-    private final List<String> cancelPhrases;
-
     public SimpleCanceller(String... cancelPhrases) {
-        this.cancelPhrases = List.of(cancelPhrases);
+        this(List.of(cancelPhrases));
     }
 
-    public SimpleCanceller(List<String> cancelPhrases) {
+    public SimpleCanceller {
         Valid.checkBoolean(!cancelPhrases.isEmpty(), "Cancel phrases cannot be empty");
 
-        this.cancelPhrases = cancelPhrases;
     }
 
 
