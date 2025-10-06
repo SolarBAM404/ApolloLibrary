@@ -1,31 +1,42 @@
 package me.solar.apolloLibrary.games.managers;
 
+import io.papermc.paper.persistence.PersistentDataContainerView;
 import lombok.Getter;
+import me.solar.apolloLibrary.entities.ApolloPlayerContainer;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class GamesPlayer {
+public class GamesPlayer implements ApolloPlayerContainer {
 
-    private final UUID uuid;
+    private UUID uuid;
+
     @Getter
-    private final Map<String, Object> data = new HashMap<>();
+    private final Map<String, Object> metadata = new HashMap<>();
 
-    public GamesPlayer(UUID uuid) {
+    public GamesPlayer(UUID uuid){
         this.uuid = uuid;
     }
 
-    public UUID getUUID() {
+    @Override
+    public UUID getUniqueId() {
         return uuid;
     }
 
-    public Object getData(String key) {
-        return data.get(key);
+    @Override
+    public OfflinePlayer getOfflinePlayer() {
+        return Bukkit.getOfflinePlayer(uuid);
     }
 
-    public void setData(String key, Object value) {
-        data.put(key, value);
+    @Override
+    public PersistentDataContainerView getPersistentDataContainer() {
+        return getOfflinePlayer().getPersistentDataContainer();
     }
 
+    public Object getMetadata(String key) {
+        return metadata.get(key);
+    }
 }
