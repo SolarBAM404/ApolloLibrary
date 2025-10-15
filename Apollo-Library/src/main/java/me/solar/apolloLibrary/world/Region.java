@@ -68,10 +68,57 @@ public interface Region {
     double getArea();
 
     /**
+     * Get the height of this region (Y axis).
+     *
+     * @return The height.
+     */
+    double getHeight();
+
+    /**
+     * Get the width of this region (X axis).
+     *
+     * @return The width.
+     */
+    double getWidth();
+
+    /**
+     * Get the length of this region (Z axis).
+     *
+     * @return The length.
+     */
+    double getLength();
+
+    /**
+     * Get the center of this region.
+     * @return The center location.
+     */
+    Location getCenter();
+
+    /**
      * Get the metadata or flags for this region.
      *
      * @return The metadata.
      */
     Map<String, Object> getMetadata();
+
+    /**
+     * Get the edge locations of this region.
+     *
+     * @return A list of edge locations.
+     */
+    List<Location> getEdges();
+
+    /**
+     * Get all locations within this region including inside
+     *
+     * @return A list of all locations within this region.
+     */
+    List<Location> getAllLocations();
+
+    void visualize();
+
+    void unvisualize();
+
+    boolean isVisualized();
 
 }

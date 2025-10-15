@@ -1,24 +1,33 @@
 package me.solar.apolloLibrary.world;
 
 import lombok.Getter;
+import lombok.Setter;
+import me.solar.apolloLibrary.runnables.RunnableObject;
+import me.solar.apolloLibrary.utils.MathsUtils;
+import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.BoundingBox;
 
-import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 public class CuboidRegion implements Region {
+
+    @Setter
+    private Location pointA, pointB;
 
     private final double minX, minY, minZ;
     private final double maxX, maxY, maxZ;
     private final World world;
     private final String id;
     private final Map<String, Object> metadata = new HashMap<>();
+
+    private RunnableObject runnableObject;
+    private List<Player> viewers = new ArrayList<>();
 
     // Constructors
     public CuboidRegion(World world, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
@@ -104,8 +113,135 @@ public class CuboidRegion implements Region {
     }
 
     @Override
+    public double getHeight() {
+        return MathsUtils.max(1, maxY - minY);
+    }
+
+    @Override
+    public double getWidth() {
+        return MathsUtils.max(1, maxX - minX);
+    }
+
+    @Override
+    public double getLength() {
+        return MathsUtils.max(1, maxZ - minZ);
+    }
+
+    @Override
+    public Location getCenter() {
+        return new Location(world, (minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2);
+    }
+
+    @Override
     public Map<String, Object> getMetadata() {
         return metadata;
+    }
+
+    @Override
+    public List<Location> getEdges() {
+        List<Location> edges = List.of();
+
+        Location min = new Location(world, minX, minY, minZ);
+        Location max = new Location(world, maxX, maxY, maxZ);
+
+        addEdge(edges, (int)minX, (int)maxX, CoordinateType.X, minY, minZ); // Bottom face, minZ
+        addEdge(edges, (int)minX, (int)maxX, CoordinateType.X, minY, maxZ); // Bottom face, maxZ
+        addEdge(edges, (int)minX, (int)maxX, CoordinateType.X, maxY, minZ); // Top face, minZ
+        addEdge(edges, (int)minX, (int)maxX, CoordinateType.X, maxY, maxZ); // Top face, maxZ
+
+        addEdge(edges, (int)minX, (int)maxX, CoordinateType.Z, minY, minX); // Front face, minX
+        addEdge(edges, (int)minX, (int)maxX, CoordinateType.Z, minY, maxX); // Front face, maxX
+        addEdge(edges, (int)minX, (int)maxX, CoordinateType.Z, maxY, minX); // Back face, minX
+        addEdge(edges, (int)minX, (int)maxX, CoordinateType.Z, maxY, maxX); // Back face, maxX
+
+        addEdge(edges, (int)minY, (int)maxY, CoordinateType.Y, minX, minZ); // Left face, minZ
+        addEdge(edges, (int)minY, (int)maxY, CoordinateType.Y, minX, maxZ); // Left face, maxZ
+        addEdge(edges, (int)minY, (int)maxY, CoordinateType.Y, maxX, minZ); // Right face, minZ
+        addEdge(edges, (int)minY, (int)maxY, CoordinateType.Y, maxX, maxZ); // Right face, maxZ
+
+        return edges;
+    }
+
+    private void addEdge(List<Location> edges, int loopMin, int loopMax, CoordinateType type, double valueA, double valueB) {
+
+        switch (type) {
+            case X -> {
+                for (double x = loopMin; x <= loopMax; x++) {
+                    edges.add(new Location(world, x, valueA, valueB));
+                }
+            }
+            case Y -> {
+                for (double y = loopMin; y <= loopMax; y++) {
+                    edges.add(new Location(world, valueA, y, valueB));
+                }
+            }
+            case Z -> {
+                for (double z = loopMin; z <= loopMax; z++) {
+                    edges.add(new Location(world, valueA, valueB, z));
+                }
+            }
+            default -> {
+                throw new IllegalArgumentException("Invalid coordinate type: " + type);
+            }
+        }
+
+
+    }
+
+    /**
+     * Retrieves all locations within the bounds of this cuboid region.
+     * This includes every possible coordinate within the defined
+     * minimum and maximum bounds for X, Y, and Z dimensions in the specified world.
+     * <p>
+     * Note: This method can be resource-intensive for large regions due to the potentially large number of locations.
+     * It is recommended to use {@link #getPoints()} instead.
+     * Or to asynchronously run this method in a separate thread.
+     *
+     * @return A list of all {@code Location} objects within the region.
+     */
+    @Override
+    public List<Location> getAllLocations() {
+        List<Location> locations = new ArrayList<>();
+        for (double x = minX; x <= maxX; x++) {
+            for (double y = minY; y <= maxY; y++) {
+                for (double z = minZ; z <= maxZ; z++) {
+                    locations.add(new Location(world, x, y, z));
+                }
+            }
+        }
+        return locations;
+    }
+
+    @Override
+    public void visualize() {
+        if (isVisualized()) return;
+
+        runnableObject = RunnableObject.of(() -> {
+            for (Location loc : getPoints()) {
+                Particle.FLAME.builder().count(1).color(Color.AQUA)
+                        .location(loc)
+                        .receivers(viewers);
+            }
+        });
+        runnableObject.runTaskTimer(0, 5);
+    }
+
+    @Override
+    public void unvisualize() {
+        runnableObject.cancel();
+    }
+
+    @Override
+    public boolean isVisualized() {
+        return false;
+    }
+
+    public void addViewer(Player player) {
+        viewers.add(player);
+    }
+
+    public void removeViewer(Player player) {
+        viewers.remove(player);
     }
 
     @Override

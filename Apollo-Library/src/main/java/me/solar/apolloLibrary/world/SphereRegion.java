@@ -106,8 +106,94 @@ public class SphereRegion implements Region {
     }
 
     @Override
+    public double getHeight() {
+        return 0;
+    }
+
+    @Override
+    public double getWidth() {
+        return 0;
+    }
+
+    @Override
+    public double getLength() {
+        return 0;
+    }
+
+    @Override
+    public Location getCenter() {
+        return center.clone();
+    }
+
+    @Override
     public Map<String, Object> getMetadata() {
         return metadata;
+    }
+
+    @Override
+    public List<Location> getEdges() {
+        List<Location> edgePoints = new java.util.ArrayList<>();
+        World world = center.getWorld();
+        int cx = center.getBlockX();
+        int cy = center.getBlockY();
+        int cz = center.getBlockZ();
+        int r = (int) Math.round(radius);
+        double threshold = 0.5; // Adjust for thickness
+
+        for (int x = cx - r; x <= cx + r; x++) {
+            for (int y = cy - r; y <= cy + r; y++) {
+                for (int z = cz - r; z <= cz + r; z++) {
+                    double dist = Math.sqrt(
+                            Math.pow(x + 0.5 - center.getX(), 2) +
+                                    Math.pow(y + 0.5 - center.getY(), 2) +
+                                    Math.pow(z + 0.5 - center.getZ(), 2)
+                    );
+                    if (Math.abs(dist - radius) <= threshold) {
+                        edgePoints.add(new Location(world, x, y, z));
+                    }
+                }
+            }
+        }
+        return edgePoints;
+    }
+
+    @Override
+    public List<Location> getAllLocations() {
+        List<Location> points = new java.util.ArrayList<>();
+        World world = center.getWorld();
+        int cx = center.getBlockX();
+        int cy = center.getBlockY();
+        int cz = center.getBlockZ();
+        int r = (int) Math.round(radius);
+
+        for (int x = cx - r; x <= cx + r; x++) {
+            for (int y = cy - r; y <= cy + r; y++) {
+                for (int z = cz - r; z <= cz + r; z++) {
+                    double distSq = Math.pow(x + 0.5 - center.getX(), 2)
+                            + Math.pow(y + 0.5 - center.getY(), 2)
+                            + Math.pow(z + 0.5 - center.getZ(), 2);
+                    if (distSq <= radius * radius) {
+                        points.add(new Location(world, x, y, z));
+                    }
+                }
+            }
+        }
+        return points;
+    }
+
+    @Override
+    public void visualize() {
+        throw new UnsupportedOperationException("SphereRegion does not support visualization");
+    }
+
+    @Override
+    public void unvisualize() {
+        throw new UnsupportedOperationException("SphereRegion does not support visualization");
+    }
+
+    @Override
+    public boolean isVisualized() {
+        return false;
     }
 
     @Override
