@@ -26,22 +26,19 @@ public abstract class TimerTask extends RunnableObject {
 
     /**
      * Called on each tick of the timer.
-     *
-     * @param bukkitTask the BukkitTask instance
      */
     @Override
-    public void accept(BukkitTask bukkitTask) {
+    public void run() {
         if (currentTime >= time) {
-            bukkitTask.cancel();
+            this.cancel();
             return;
         }
         currentTime++;
-        run();
-        super.accept(bukkitTask);
+        runTimer();
     }
 
     /**
      * The action to perform on each timer tick.
      */
-    public abstract void run();
+    public abstract void runTimer();
 }

@@ -27,7 +27,7 @@ public class CountdownTask extends TimerTask {
      * Called on each timer tick. Decrements countdown and calls {@link #action()}.
      */
     @Override
-    public void run() {
+    public void runTimer() {
 
         if (countdownTime <= 0) {
             return;
