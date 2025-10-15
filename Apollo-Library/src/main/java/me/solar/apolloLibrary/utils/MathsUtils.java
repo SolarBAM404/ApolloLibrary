@@ -7,7 +7,7 @@ import java.io.Serial;
 import java.text.DecimalFormat;
 import java.util.*;
 
-public class MathsUtils {
+public final class MathsUtils {
     private static final DecimalFormat oneDigitFormat = new DecimalFormat("#.#");
     private static final DecimalFormat twoDigitsFormat = new DecimalFormat("#.##");
     private static final DecimalFormat threeDigitsFormat = new DecimalFormat("#.###");
@@ -36,6 +36,36 @@ public class MathsUtils {
         }
 
         return max.getAsInt();
+    }
+
+    public static double max(double... numbers) {
+        OptionalDouble max = Arrays.stream(numbers).max();
+
+        if (max.isEmpty()) {
+            throw new IllegalArgumentException("No numbers given!");
+        }
+
+        return max.getAsDouble();
+    }
+
+    public static int min(int... numbers) {
+        OptionalInt min = Arrays.stream(numbers).min();
+
+        if (min.isEmpty()) {
+            throw new IllegalArgumentException("No numbers given!");
+        }
+
+        return min.getAsInt();
+    }
+
+    public static double min(double... numbers) {
+        OptionalDouble min = Arrays.stream(numbers).min();
+
+        if (min.isEmpty()) {
+            throw new IllegalArgumentException("No numbers given!");
+        }
+
+        return min.getAsDouble();
     }
 
     public static long floor(double d1) {
@@ -288,6 +318,16 @@ public class MathsUtils {
         romanNumbers.put(1, "I");
     }
 
+    public static double round(double value) {
+        return (int)Math.round(value);
+    }
+
+    public static double round(double value, int sf) {
+        double factor = Math.pow(10, sf);
+        return Math.round(value * factor) / factor;
+    }
+
+
     public static final class CalculatorException extends RuntimeException {
         @Serial
         private static final long serialVersionUID = 1L;
@@ -296,5 +336,6 @@ public class MathsUtils {
             super(message);
         }
     }
+
 }
 

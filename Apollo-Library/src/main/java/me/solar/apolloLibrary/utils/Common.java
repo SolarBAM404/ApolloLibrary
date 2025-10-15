@@ -1,8 +1,11 @@
 package me.solar.apolloLibrary.utils;
 
 import com.google.common.collect.Range;
+import com.mojang.brigadier.tree.LiteralCommandNode;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import io.papermc.paper.plugin.lifecycle.event.LifecycleEvent;
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import lombok.Getter;
-import me.solar.apolloLibrary.ApolloLibrary;
 import me.solar.apolloLibrary.core.ApolloPlugin;
 import me.solar.apolloLibrary.exceptions.PluginException;
 import me.solar.apolloLibrary.runnables.RunnableObject;
@@ -13,7 +16,9 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -146,7 +151,7 @@ public class Common {
      */
     public static void broadcast(String message) {
         Component component = component(message);
-        ApolloLibrary.getBukkitServer().broadcast(component);
+        Bukkit.getServer().broadcast(component);
     }
 
     /**
@@ -167,7 +172,7 @@ public class Common {
      */
     public static void log(String message) {
         Component component = component(message);
-        ApolloLibrary.getBukkitServer().getConsoleSender().sendMessage(component);
+        Bukkit.getServer().getConsoleSender().sendMessage(component);
     }
 
     /**
@@ -260,7 +265,7 @@ public class Common {
     }
 
     public static void registerListener(JavaPlugin plugin, Listener listener) {
-        Bukkit.getPluginManager().registerEvents(listener, plugin);
+       plugin.getServer().getPluginManager().registerEvents(listener, plugin);
     }
 
     // ------------------- Runnables ------------------ //
@@ -271,7 +276,7 @@ public class Common {
      * @param runnableObject the runnable object
      */
     public static void runTask(JavaPlugin plugin, RunnableObject runnableObject) {
-        Bukkit.getServer().getScheduler().runTask(plugin, runnableObject);
+        runnableObject.runTask(plugin);
     }
 
     /**
@@ -281,7 +286,7 @@ public class Common {
      * @param delayTicks delay in ticks
      */
     public static void runTaskLater(JavaPlugin plugin, RunnableObject runnableObject, long delayTicks) {
-        Bukkit.getServer().getScheduler().runTaskLater(plugin, runnableObject, delayTicks);
+        runnableObject.runTaskLater(plugin, delayTicks);
     }
 
     /**
@@ -292,7 +297,7 @@ public class Common {
      * @param periodTicks period between executions in ticks
      */
     public static void runTaskTimer(JavaPlugin plugin, RunnableObject runnableObject, long delayTicks, long periodTicks) {
-        Bukkit.getServer().getScheduler().runTaskTimer(plugin, runnableObject, delayTicks, periodTicks);
+        runnableObject.runTaskTimer(plugin, delayTicks, periodTicks);
     }
 
     /**
@@ -303,7 +308,7 @@ public class Common {
      */
     public static RunnableObject runTask(JavaPlugin plugin, Runnable runnable) {
         RunnableObject runnableObject = RunnableObject.of(runnable);
-        Bukkit.getServer().getScheduler().runTask(plugin, runnableObject);
+        plugin.getServer().getScheduler().runTask(plugin, runnableObject);
         return runnableObject;
     }
 
@@ -316,7 +321,7 @@ public class Common {
      */
     public static RunnableObject runTaskLater(JavaPlugin plugin, Runnable runnable, long delayTicks) {
         RunnableObject runnableObject = RunnableObject.of(runnable);
-        Bukkit.getServer().getScheduler().runTaskLater(plugin, runnableObject, delayTicks);
+        runnableObject.runTaskLater(plugin, delayTicks);
         return runnableObject;
     }
 
@@ -330,8 +335,65 @@ public class Common {
      */
     public static RunnableObject runTaskTimer(JavaPlugin plugin, Runnable runnable, long delayTicks, long periodTicks) {
         RunnableObject runnableObject = RunnableObject.of(runnable);
-        Bukkit.getServer().getScheduler().runTaskTimer(plugin, runnableObject, delayTicks, periodTicks);
+        runnableObject.runTaskTimer(plugin, delayTicks, periodTicks);
         return runnableObject;
+    }
+
+    /**
+     * Runs a task synchronously using ApolloPlugin.getInstance().
+     * @param runnableObject the runnable object
+     */
+    public static void runTask(RunnableObject runnableObject) {
+        runTask(ApolloPlugin.getInstance(), runnableObject);
+    }
+
+    /**
+     * Runs a task later after a delay using ApolloPlugin.getInstance().
+     * @param runnableObject the runnable object
+     * @param delayTicks delay in ticks
+     */
+    public static void runTaskLater(RunnableObject runnableObject, long delayTicks) {
+        runTaskLater(ApolloPlugin.getInstance(), runnableObject, delayTicks);
+    }
+
+    /**
+     * Runs a repeating task with a delay and period using ApolloPlugin.getInstance().
+     * @param runnableObject the runnable object
+     * @param delayTicks initial delay in ticks
+     * @param periodTicks period between executions in ticks
+     */
+    public static void runTaskTimer(RunnableObject runnableObject, long delayTicks, long periodTicks) {
+        runTaskTimer(ApolloPlugin.getInstance(), runnableObject, delayTicks, periodTicks);
+    }
+
+    /**
+     * Runs a Runnable synchronously using ApolloPlugin.getInstance().
+     * @param runnable the runnable
+     * @return the RunnableObject wrapper
+     */
+    public static RunnableObject runTask(Runnable runnable) {
+        return runTask(ApolloPlugin.getInstance(), runnable);
+    }
+
+    /**
+     * Runs a Runnable later after a delay using ApolloPlugin.getInstance().
+     * @param runnable the runnable
+     * @param delayTicks delay in ticks
+     * @return the RunnableObject wrapper
+     */
+    public static RunnableObject runTaskLater(Runnable runnable, long delayTicks) {
+        return runTaskLater(ApolloPlugin.getInstance(), runnable, delayTicks);
+    }
+
+    /**
+     * Runs a repeating Runnable with a delay and period using ApolloPlugin.getInstance().
+     * @param runnable the runnable
+     * @param delayTicks initial delay in ticks
+     * @param periodTicks period between executions in ticks
+     * @return the RunnableObject wrapper
+     */
+    public static RunnableObject runTaskTimer(Runnable runnable, long delayTicks, long periodTicks) {
+        return runTaskTimer(ApolloPlugin.getInstance(), runnable, delayTicks, periodTicks);
     }
 
     public static void cancelTask(BukkitTask bukkitTask) {
@@ -343,7 +405,7 @@ public class Common {
     }
 
     public static void callEventLater(int delayTicks, Event event) {
-        runTaskLater(ApolloPlugin.getStaticInstance(), () -> callEvent(event), delayTicks);
+        runTaskLater(ApolloPlugin.getInstance(), () -> callEvent(event), delayTicks);
     }
 
     public static int getRandomInt(int min, int max) {
@@ -445,23 +507,27 @@ public class Common {
     }
 
     public static void registerIncomingPluginMessageListener(String channel, PluginMessageListener listener) {
-        Bukkit.getMessenger().registerIncomingPluginChannel(ApolloPlugin.getStaticInstance(), channel, listener);
+        Bukkit.getMessenger().registerIncomingPluginChannel(ApolloPlugin.getInstance(), channel, listener);
     }
 
     public static void registerOutgoingPluginMessageListener(String channel) {
-        Bukkit.getMessenger().registerOutgoingPluginChannel(ApolloPlugin.getStaticInstance(), channel);
+        Bukkit.getMessenger().registerOutgoingPluginChannel(ApolloPlugin.getInstance(), channel);
     }
 
     public static void sendPluginMessage(String channel, byte[] message) {
-        Bukkit.getServer().sendPluginMessage(ApolloPlugin.getStaticInstance(), channel, message);
+        Bukkit.getServer().sendPluginMessage(ApolloPlugin.getInstance(), channel, message);
     }
 
     public static void sendPluginMessage(Player player, String channel, byte[] message) {
-        player.sendPluginMessage(ApolloPlugin.getStaticInstance(), channel, message);
+        player.sendPluginMessage(ApolloPlugin.getInstance(), channel, message);
     }
 
     public static NamespacedKey namespacedKey(String key) {
-        return new NamespacedKey(ApolloPlugin.getStaticInstance(), key);
+        return new NamespacedKey(ApolloPlugin.getInstance(), key);
+    }
+
+    public static NamespacedKey namespacedKey(String namespace, String key) {
+        return new NamespacedKey(namespace, key);
     }
 
     public static String[] locationToStringArray(Location location) {
@@ -471,6 +537,23 @@ public class Common {
                 String.valueOf(location.getBlockY()),
                 String.valueOf(location.getBlockZ())
         };
+    }
+
+    public static void registerCommand(JavaPlugin plugin, String command, CommandExecutor commandExecutor) {
+        PluginCommand pluginCommand = plugin.getCommand(command);
+        Valid.checkNotNull(pluginCommand, "Command is not in the plugin.yml file, please add it!");
+        assert pluginCommand != null;
+        pluginCommand.setExecutor(commandExecutor);
+    }
+
+    public static void registerCommand(String command, CommandExecutor commandExecutor) {
+        registerCommand(ApolloPlugin.getInstance(), command, commandExecutor);
+    }
+
+    public static void registerCommand(LiteralCommandNode<CommandSourceStack> commandNode) {
+        ApolloPlugin.getInstance().getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event -> {
+            event.registrar().register(commandNode);
+        });
     }
 
 }

@@ -1,6 +1,9 @@
 package me.solar.apolloLibrary.utils;
 
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -13,6 +16,17 @@ public class PlayerUtils {
     public static boolean isPlayer(Object object) {
         return object instanceof Player;
     }
+
+    /// Packet Utilities
+
+    public static void sendBlock(Player player, Location location, Material material) {
+        player.sendBlockChange(location, material.createBlockData());
+    }
+
+    public static void sendBlock(Player player, Location location, BlockData blockData) {
+        player.sendBlockChange(location, blockData);
+    }
+
 
     /// Inventory Utilities
 

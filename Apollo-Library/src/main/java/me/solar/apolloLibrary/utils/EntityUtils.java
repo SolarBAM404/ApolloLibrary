@@ -160,7 +160,7 @@ public class EntityUtils {
             throw new RuntimeException("Cannot track entity with fly and hit listeners on null!");
         } else {
             TimerTask timerTask = new TimerTask(timeoutTicks) {
-                public void run() {
+                public void runTimer() {
                     if (entity.isOnGround()) {
                         if (hitGroundListener != null) {
                             hitGroundListener.run();
@@ -168,7 +168,7 @@ public class EntityUtils {
                     }
                 }
             };
-            Common.runTask(ApolloPlugin.getStaticInstance(), timerTask);
+            Common.runTask(ApolloPlugin.getInstance(), timerTask);
 
         }
     }
@@ -176,7 +176,7 @@ public class EntityUtils {
     public static void trackHit(Projectile projectile, Consumer<ProjectileHitEvent> hitTask) {
         HitTracking.addFlyingProjectile(projectile, hitTask);
         if (!registeredHitListener) {
-            Common.registerListener(ApolloPlugin.getStaticInstance(), new HitTracking());
+            Common.registerListener(ApolloPlugin.getInstance(), new HitTracking());
             registeredHitListener = true;
         }
 

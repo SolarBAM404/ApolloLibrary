@@ -2,6 +2,7 @@ package me.solar.apolloLibrary.utils;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -57,6 +58,24 @@ public class ItemStackUtils {
 
     public static ItemStack createItemStack(Material material) {
         return new ItemStack(material);
+    }
+
+    /**
+     * Sets the custom model data for an ItemStack.
+     *
+     * @param item  the ItemStack to modify
+     * @param model the custom model data as a namespaced key (e.g., "namespace:model")
+     */
+    public static void setItemModel(ItemStack item, String model) {
+        ItemMeta itemMeta = item.getItemMeta();
+        itemMeta.setItemModel(Common.namespacedKey(model));
+        item.setItemMeta(itemMeta);
+    }
+
+    public static void setItemModel(ItemStack item, NamespacedKey model) {
+        ItemMeta itemMeta = item.getItemMeta();
+        itemMeta.setItemModel(model);
+        item.setItemMeta(itemMeta);
     }
 
 }
