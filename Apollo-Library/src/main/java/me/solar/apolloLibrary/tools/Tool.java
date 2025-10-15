@@ -1,11 +1,13 @@
 package me.solar.apolloLibrary.tools;
 
+import me.solar.apolloLibrary.core.ApolloPlugin;
 import me.solar.apolloLibrary.utils.Common;
 import me.solar.apolloLibrary.utils.ItemStackUtils;
 import me.solar.apolloLibrary.utils.PlayerUtils;
 import me.solar.apolloLibrary.utils.Valid;
 import me.solar.apolloLibrary.runnables.RunnableObject;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -22,6 +24,8 @@ import java.util.List;
  */
 public abstract class Tool {
 
+    protected final JavaPlugin plugin;
+
     /**
      * List of all registered tools.
      */
@@ -32,6 +36,8 @@ public abstract class Tool {
      * @param tool the tool to register
      */
     static void register(Tool tool) {
+        new ToolListener(ApolloPlugin.getInstance());
+
         Valid.checkBoolean(!isRegistered(tool), "Tool with itemstack " + tool.getItem() + " already registered");
         tools.add(tool);
     }
@@ -70,23 +76,15 @@ public abstract class Tool {
 
     /**
      * Constructs and registers a new Tool instance.
-     * @param plugin the plugin instance
      */
-    protected Tool(JavaPlugin plugin) {
-        (new Thread(() -> {
-            try {
-                Thread.sleep(3L);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+    protected Tool() {
+        this.plugin = ApolloPlugin.getInstance();
+        Common.runTask(RunnableObject.of(() -> {
+            if (!isRegistered(this)) {
+                register(this);
             }
 
-            Common.runTask(plugin, RunnableObject.of(() -> {
-                if (!isRegistered(this)) {
-                    register(this);
-                }
-
-            }));
-        })).start();
+        }));
     }
 
     /**
