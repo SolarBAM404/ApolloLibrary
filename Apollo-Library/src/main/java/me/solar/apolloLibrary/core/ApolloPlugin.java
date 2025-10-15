@@ -1,50 +1,68 @@
 package me.solar.apolloLibrary.core;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
+import me.solar.apolloLibrary.utils.Common;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 
 /**
  * Abstract base class for Apollo plugins.
  */
 public abstract class ApolloPlugin extends JavaPlugin {
 
+    @Getter
+    @Setter(AccessLevel.PROTECTED)
+    private static ApolloPlugin instance;
+
     /**
      * The name of the plugin.
      */
     @Getter
+    @Setter
     private static String pluginName;
 
     /**
      * The version of the plugin.
      */
     @Getter
+    @Setter
     private static String version;
 
     /**
      * Called when the plugin is enabled.
      */
     @Override
-    public void onEnable() {
+    public final void onEnable() {
         // Plugin startup logic
-        onLoad();
+        startup();
     }
 
     /**
      * Called when the plugin is disabled.
      */
     @Override
-    public void onDisable() {
+    public final void onDisable() {
         // Plugin shutdown logic
-        onShutdown();
+        shutdown();
+    }
+
+    public final void reload() {
+        Common.log("Reloading plugin");
+        onReload();
+        Common.log("Plugin reloaded");
     }
 
     /**
      * Called when the plugin is loaded.
      */
-    public abstract void onLoad();
+    public abstract void startup();
 
     /**
      * Called when the plugin is reloaded.
@@ -54,22 +72,6 @@ public abstract class ApolloPlugin extends JavaPlugin {
     /**
      * Called when the plugin is shut down.
      */
-    public abstract void onShutdown();
-
-    public static <T extends ApolloPlugin> T getStaticInstance() {
-        try {
-            Class<?> clazz = ApolloPlugin.class;
-            Field instanceField = clazz.getDeclaredField("instance");
-            if (Modifier.isStatic(instanceField.getModifiers())) {
-                instanceField.setAccessible(true);
-                return (T) instanceField.get(null);
-            }
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            // Handle or log exception as needed
-            e.printStackTrace();
-        }
-        throw new IllegalStateException("ApolloPlugin instance is not static");
-    }
-
+    public abstract void shutdown();
 
 }
