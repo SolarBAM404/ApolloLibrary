@@ -49,6 +49,7 @@ public abstract class Menu {
         this.autoCancel = true;
         this.name = name;
         this.inventory = Bukkit.createInventory(null, size, name);
+        MenuListener.setup();
     }
 
     protected abstract void initialize();
