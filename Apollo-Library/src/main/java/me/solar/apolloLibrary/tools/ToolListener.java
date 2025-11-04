@@ -43,22 +43,19 @@ public class ToolListener implements Listener {
         }
 
         lastUsedMap.put(player, tool);
-        if (tool != null) {
-            try {
-                tool.onBlockClick(event);
-                if (tool.autoCancel()) {
-                    event.setCancelled(true);
-                }
-            } catch (Exception e) {
+        if (        try {
+            tool.onBlockClick(event);
+            if (tool.autoCancel()) {
                 event.setCancelled(true);
-                String action = String.valueOf(event.getAction());
-                Common.tell(player, "<red><bold>Error:</bold>Failed to handle " + action + " using tool: " + tool.getClass().getSimpleName());
-                String var10000 = String.valueOf(event.getAction());
-                Common.log("<red><bold>Error:</bold>Failed to handle " + action + " using tool: " + tool.getClass().getSimpleName());
-                Common.log(e.getMessage());
-                for (StackTraceElement element : e.getStackTrace()) {
-                    Common.log(element.toString());
-                }
+            }
+        } catch (Exception e) {
+            event.setCancelled(true);
+            String action = String.valueOf(event.getAction());
+            Common.tell(player, "<red><bold>Error:</bold>Failed to handle " + action + " using tool: " + tool.getClass().getSimpleName());
+            Common.log("<red><bold>Error:</bold>Failed to handle " + action + " using tool: " + tool.getClass().getSimpleName());
+            Common.log(e.getMessage());
+            for (StackTraceElement element : e.getStackTrace()) {
+                Common.log(element.toString());
             }
         }
 

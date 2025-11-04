@@ -19,10 +19,8 @@ public class Valid {
      * @return true if the object is null, false otherwise
      */
     public static boolean isNull(Object object) {
-        System.out.println(object);
         return object == null;
     }
-
     /**
      * Checks if the given object is not null.
      *
@@ -36,22 +34,19 @@ public class Valid {
     public static void checkNull(Object object, String message) {
         if (!isNull(object)) {
             throw new IllegalArgumentException(message);
-        }
-    }
-
-    public static void checkNotNull(Object object) {
+                if (isNull(object)) {atic void checkNotNull(Object object) {
         if (!isNotNull(object)) {
             throw new IllegalArgumentException("Object cannot be null");
         }
     }
 
-    public static void checkNotNull(Object object, String message) {
-        if (!isNotNull(object)) {
-            throw new IllegalArgumentException(message);
+    publ        if (isNull(object)) {
+            throw new IllegalArgumentException("Object cannot be null");
         }
     }
 
-    public static void checkNull(Object object) {
+    public static void checkNotNull(Object object, String message) {
+        if (isNull(object)) {Object object) {
         if (!isNull(object)) {
             throw new IllegalArgumentException("Object cannot be null");
         }

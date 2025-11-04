@@ -1,11 +1,8 @@
 package me.solar.apolloLibrary.world;
 
 import lombok.Getter;
-import me.solar.apolloLibrary.config.ConfigFormat;
 import me.solar.apolloLibrary.config.ConfigKey;
-import me.solar.apolloLibrary.config.FormatType;
 import me.solar.apolloLibrary.runnables.RunnableObject;
-import me.solar.apolloLibrary.utils.Common;
 import me.solar.apolloLibrary.utils.MathsUtils;
 import me.solar.apolloLibrary.utils.WorldUtils;
 import org.bukkit.*;
@@ -29,7 +26,7 @@ public class CuboidRegion implements Region {
     private final Map<String, Object> metadata = new HashMap<>();
 
     private final List<Player> viewers = new ArrayList<>();
-    private final Visualizer runnableObject = new Visualizer();
+    private final Visualizer visualizer = new Visualizer();
     private boolean isVisualized = false;
 
     public CuboidRegion() {
@@ -258,16 +255,16 @@ public class CuboidRegion implements Region {
     public void visualize() {
         if (isVisualized()) return;
 
-        runnableObject.changeViewers(viewers);
-        runnableObject.changeEdges(getEdges());
-        runnableObject.runTaskTimer(0, 1);
+        visualizer.changeViewers(viewers);
+        visualizer.changeEdges(getEdges());
+        visualizer.runTaskTimer(0, 1);
         isVisualized(true);
     }
 
     @Override
     public void unvisualize() {
         viewers.clear();
-        runnableObject.cancel();
+        visualizer.cancel();
         isVisualized(false);
     }
 

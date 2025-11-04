@@ -135,7 +135,11 @@ public abstract class RunnableObject extends BukkitRunnable {
 
         super.cancel();
         try {
-            // Use reflection to set the private 'task' field to null
+                        // Reflection hack: BukkitRunnable does not provide a public/protected way to reset or clear the 'task' field,
+            // which can cause issues if you want to reschedule or reuse this RunnableObject instance.
+            // We use reflection to set the private 'task' field to null after cancellation.
+            // WARNING: This is fragile and may break if the BukkitRunnable implementation changes (e.g., field name or type changes).
+            // Only use this if absolutely necessary, and test thoroughly when updating Bukkit/Spigot versions.
             Field taskField = BukkitRunnable.class.getDeclaredField("task");
             taskField.setAccessible(true);
             taskField.set(this, null);
