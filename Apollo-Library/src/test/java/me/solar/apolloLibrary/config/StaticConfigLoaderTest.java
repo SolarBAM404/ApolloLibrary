@@ -1,3 +1,4 @@
+// java
 package me.solar.apolloLibrary.config;
 
 import org.junit.jupiter.api.AfterEach;
@@ -11,7 +12,7 @@ import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class StaticConfigLoaderTest {
+class StaticConfigHandlerTest {
 
     private static final Path TEMP_FILE = Paths.get("temp.yml");
 
@@ -19,6 +20,7 @@ class StaticConfigLoaderTest {
     void setUp() throws IOException {
         Files.deleteIfExists(TEMP_FILE);
 
+        // initialize defaults
         TestConfig.number = 42;
         TestConfig.name = "Apollo";
         TestConfig.Inner.flag = false;
@@ -31,49 +33,74 @@ class StaticConfigLoaderTest {
 
     @Test
     void testSaveYamlConfig() throws Exception {
-        StaticConfigLoader.saveConfig(TestConfig.class, TEMP_FILE);
+        StaticConfigHandler.saveConfig(TestConfig.class, TEMP_FILE);
 
-        // Verify the file exists with correct contents
         assertTrue(Files.exists(TEMP_FILE));
         String yamlContent = Files.readString(TEMP_FILE);
-        System.out.println(yamlContent);
 
+        // basic values
         assertTrue(yamlContent.contains("number: 42"));
         assertTrue(yamlContent.contains("name: Apollo"));
+
+        // nested inner section and flag
         assertTrue(yamlContent.contains("inner:"));
         assertTrue(yamlContent.contains("flag: false"));
 
-        // Verify changes were saved
-        TestConfig.number = 0;
-        TestConfig.name = "";
-        TestConfig.Inner.flag = true;
-        StaticConfigLoader.saveConfig(TestConfig.class, TEMP_FILE);
-
-        yamlContent = Files.readString(TEMP_FILE);
-        System.out.println(yamlContent);
-        assertTrue(yamlContent.contains("number: 0"));
-        assertTrue(yamlContent.contains("name: ''"));
-        assertTrue(yamlContent.contains("inner:"));
-        assertTrue(yamlContent.contains("flag: true"));
-
-
-        // Verify comments are present
+        // comments
         assertTrue(yamlContent.contains("# A number"));
         assertTrue(yamlContent.contains("# A string name"));
         assertTrue(yamlContent.contains("# An inner class"));
         assertTrue(yamlContent.contains("# An inner flag"));
+
+        // change values and save again to ensure updated values persist
+        TestConfig.number = 0;
+        TestConfig.name = "";
+        TestConfig.Inner.flag = true;
+        StaticConfigHandler.saveConfig(TestConfig.class, TEMP_FILE);
+
+        yamlContent = Files.readString(TEMP_FILE);
+        Path expectedPath = Paths.get("src", "test", "resources", "expected-temp.yml");
+        String expected = Files.readString(expectedPath).replace("\r\n", "\n").trim();
+        String actual = yamlContent.replace("\r\n", "\n").trim();
+        assertEquals(expected, actual, "Saved YAML must exactly match expected YAML (no extra text).");
+
+        assertTrue(yamlContent.contains("number: 0"));
+        // YAML may represent empty string as '' or "", accept either
+        assertTrue(yamlContent.contains("name: ''") || yamlContent.contains("name: \"\"") || yamlContent.contains("name:"));
+        assertTrue(yamlContent.contains("flag: true"));
     }
 
     @Test
     void testLoadYamlConfig() throws Exception {
-        StaticConfigLoader.saveConfig(TestConfig.class, TEMP_FILE);
+        // write known state
+        StaticConfigHandler.saveConfig(TestConfig.class, TEMP_FILE);
+
+        // change values to non-defaults
         TestConfig.number = 0;
         TestConfig.name = "";
         TestConfig.Inner.flag = true;
-        StaticConfigLoader.loadConfig(TestConfig.class, TEMP_FILE);
+
+        // load from file and ensure values restored
+        StaticConfigHandler.loadConfig(TestConfig.class, TEMP_FILE);
+
         assertEquals(42, TestConfig.number);
         assertEquals("Apollo", TestConfig.name);
-        assertTrue(TestConfig.Inner.flag);
+        assertTrue(TestConfig.Inner.flag); // original was false
     }
 
+    // Simple static config class used by tests
+    @ConfigFormat(FormatType.YAML)
+    static class TestConfig {
+        @ConfigKey(value = "number", comment = "A number")
+        public static int number;
+
+        @ConfigKey(value = "name", comment = "A string name")
+        public static String name;
+
+        @ConfigKey(value = "inner", comment = "An inner class")
+        public static class Inner {
+            @ConfigKey(value = "flag", comment = "An inner flag")
+            public static boolean flag;
+        }
+    }
 }

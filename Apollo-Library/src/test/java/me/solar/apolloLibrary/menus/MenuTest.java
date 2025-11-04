@@ -12,12 +12,12 @@ import org.mockbukkit.mockbukkit.ServerMock;
 
 class MenuTest {
     // Provide a concrete subclass for testing
-    static class TestMenu extends me.solar.apolloLibrary.menus.Menu {
+    static class TestMenu extends Menu {
         TestMenu(String name, int size) {
             super(name, size);
         }
         @Override
-        protected void initialize(Player player) {
+        protected void initialize() {
             // Example init logic: can be left empty for now
         }
     }
@@ -46,11 +46,11 @@ class MenuTest {
     @Test
     void testMenuRegistry_AddRemove_HasMenu() {
         Menu menu = mock(TestMenu.class);
-        me.solar.apolloLibrary.menus.Menu.addMenu(menu, player);
-        assertTrue(me.solar.apolloLibrary.menus.Menu.hasMenu(player));
-        assertEquals(menu, me.solar.apolloLibrary.menus.Menu.getMenu(player));
-        me.solar.apolloLibrary.menus.Menu.removeMenu(player);
-        assertFalse(me.solar.apolloLibrary.menus.Menu.hasMenu(player));
+        Menu.addMenu(menu, player);
+        assertTrue(Menu.hasMenu(player));
+        assertEquals(menu, Menu.getMenu(player));
+        Menu.removeMenu(player);
+        assertFalse(Menu.hasMenu(player));
     }
 
     @Test
@@ -79,7 +79,7 @@ class MenuTest {
     void testUpdateCallsInitializeAndPlayerUpdateInventory() {
         TestMenu menu = spy(new TestMenu("Test", 18));
         menu.update(player);
-        verify(menu).initialize(player);
+        verify(menu).initialize();
         verify(player).updateInventory();
     }
 

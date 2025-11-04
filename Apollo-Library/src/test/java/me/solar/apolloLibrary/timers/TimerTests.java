@@ -18,7 +18,7 @@ public class TimerTests {
             }
 
             @Override
-            public void run() {
+            public void runTimer() {
                 // Simulate some work
                 System.out.println("Timer tick");
             }
@@ -44,8 +44,8 @@ public class TimerTests {
 
         // Simulate the passage of time by calling accept multiple times
         for (int i = 0; i < 6; i++) {
-            timerTask.accept(mockBukkitTask); // Passing null as BukkitTask since we are not using it in this test
-            countdownTask.accept(mockBukkitTask); // Same here
+            timerTask.runTimer(); // Passing null as BukkitTask since we are not using it in this test
+            countdownTask.runTimer(); // Same here
         }
 
         Assertions.assertEquals(5, timerTask.getTime(), "TimerTask time should be 5");

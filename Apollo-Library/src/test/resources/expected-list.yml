@@ -1,0 +1,33 @@
+maps:
+- name: Arena
+  region:
+    point-a:
+      world: world
+      x: 1.0
+      y: 2.0
+      z: 3.0
+      yaw: 0.0
+      pitch: 0.0
+    point-b:
+      world: world
+      x: 4.0
+      y: 5.0
+      z: 6.0
+      yaw: 0.0
+      pitch: 0.0
+- name: Arena
+  region:
+    point-a:
+      world: world
+      x: 1.0
+      y: 2.0
+      z: 3.0
+      yaw: 0.0
+      pitch: 0.0
+    point-b:
+      world: world
+      x: 4.0
+      y: 5.0
+      z: 6.0
+      yaw: 0.0
+      pitch: 0.0

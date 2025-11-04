@@ -1,0 +1,9 @@
+# A number
+number: 0
+# A string name
+name: ''
+# An inner class
+inner:
+  # An inner flag
+  flag: true
+# yaml
