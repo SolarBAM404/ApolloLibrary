@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import me.solar.apolloLibrary.core.ApolloPlugin;
 import me.solar.apolloLibrary.utils.Common;
 import me.solar.apolloLibrary.exceptions.ApolloCommandException;
 import org.bukkit.Bukkit;
@@ -46,6 +47,10 @@ public class CommandManager implements TabExecutor {
 
         plugin.getLogger().severe(() -> "Failed to register command: " + commandName);
         plugin.getLogger().severe("This is likely due to the command not being registered in the plugin.yml file.");
+    }
+
+    public CommandManager(String commandName) {
+        this(ApolloPlugin.getInstance(), commandName);
     }
 
     /**
