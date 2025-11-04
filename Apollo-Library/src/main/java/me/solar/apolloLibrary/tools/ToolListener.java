@@ -1,5 +1,6 @@
 package me.solar.apolloLibrary.tools;
 
+import me.solar.apolloLibrary.collection.expiringmap.ExpiringMap;
 import me.solar.apolloLibrary.utils.Common;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,7 +12,14 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.concurrent.TimeUnit;
+
 public class ToolListener implements Listener {
+    private static final ExpiringMap<Player, Tool> lastUsedMap = ExpiringMap.builder()
+            .variableExpiration()
+            .expiration(200, TimeUnit.MILLISECONDS)
+            .build();
+
     private final JavaPlugin plugin;
 
     public ToolListener(JavaPlugin plugin) {
@@ -20,12 +28,21 @@ public class ToolListener implements Listener {
     }
 
     @EventHandler(
-            priority = EventPriority.HIGHEST,
-            ignoreCancelled = false
+            priority = EventPriority.HIGHEST
     )
     public void onToolClick(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         Tool tool = Tool.getTool(player.getInventory().getItemInMainHand());
+
+        if (tool == null || player == null) {
+            return;
+        }
+
+        if (lastUsedMap.containsKey(player) && lastUsedMap.getExpectedExpiration(player) > 0) {
+            return;
+        }
+
+        lastUsedMap.put(player, tool);
         if (tool != null) {
             try {
                 tool.onBlockClick(event);
@@ -38,7 +55,10 @@ public class ToolListener implements Listener {
                 Common.tell(player, "<red><bold>Error:</bold>Failed to handle " + action + " using tool: " + tool.getClass().getSimpleName());
                 String var10000 = String.valueOf(event.getAction());
                 Common.log("<red><bold>Error:</bold>Failed to handle " + action + " using tool: " + tool.getClass().getSimpleName());
-                this.plugin.getLogger().severe(e.getMessage());
+                Common.log(e.getMessage());
+                for (StackTraceElement element : e.getStackTrace()) {
+                    Common.log(element.toString());
+                }
             }
         }
 
@@ -56,11 +76,14 @@ public class ToolListener implements Listener {
                 if (tool.autoCancel()) {
                     event.setCancelled(true);
                 }
-            } catch (Throwable t) {
+            } catch (Exception e) {
                 event.setCancelled(true);
                 Common.tell(player, "<red><bold>Error:</bold>Failed to handle block place event using tool: " + tool.getClass().getSimpleName());
                 Common.log("<red><bold>Error:</bold>Failed to handle block place event using tool: " + tool.getClass().getSimpleName());
-                this.plugin.getLogger().severe(t.getMessage());
+                Common.log(e.getMessage());
+                for (StackTraceElement element : e.getStackTrace()) {
+                    Common.log(element.toString());
+                }
             }
         }
 
