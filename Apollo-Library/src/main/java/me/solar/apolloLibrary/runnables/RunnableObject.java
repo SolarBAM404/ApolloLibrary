@@ -7,6 +7,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Field;
 import java.util.function.Consumer;
 
 /**
@@ -123,4 +124,25 @@ public abstract class RunnableObject extends BukkitRunnable {
     public BukkitTask runTaskTimerAsynchronously(long delay, long period) {
         return super.runTaskTimerAsynchronously(ApolloPlugin.getInstance(), delay, period);
     }
+
+    @Override
+    public synchronized void cancel() throws IllegalStateException {
+        try {
+            isCancelled();
+        } catch (IllegalStateException e) {
+            return;
+        }
+
+        super.cancel();
+        try {
+            // Use reflection to set the private 'task' field to null
+            Field taskField = BukkitRunnable.class.getDeclaredField("task");
+            taskField.setAccessible(true);
+            taskField.set(this, null);
+        } catch (Exception e) {
+            // Handle or log exception if needed
+        }
+    }
+
+
 }
