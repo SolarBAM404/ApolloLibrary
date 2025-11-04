@@ -1,15 +1,15 @@
 package me.solar.apolloLibrary.world;
 
 import lombok.Getter;
-import lombok.Setter;
+import me.solar.apolloLibrary.config.ConfigFormat;
+import me.solar.apolloLibrary.config.ConfigKey;
+import me.solar.apolloLibrary.config.FormatType;
 import me.solar.apolloLibrary.runnables.RunnableObject;
+import me.solar.apolloLibrary.utils.Common;
 import me.solar.apolloLibrary.utils.MathsUtils;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.World;
+import me.solar.apolloLibrary.utils.WorldUtils;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.BoundingBox;
 
 import java.util.*;
@@ -17,36 +17,35 @@ import java.util.*;
 @Getter
 public class CuboidRegion implements Region {
 
-    @Setter
-    private Location pointA, pointB;
+    @ConfigKey("point-a")
+    private Location pointA;
+    @ConfigKey("point-b")
+    private Location pointB;
 
-    private final double minX, minY, minZ;
-    private final double maxX, maxY, maxZ;
-    private final World world;
-    private final String id;
+    private double minX, minY, minZ;
+    private double maxX, maxY, maxZ;
+    private World world;
+    private String id;
     private final Map<String, Object> metadata = new HashMap<>();
 
-    private RunnableObject runnableObject;
-    private List<Player> viewers = new ArrayList<>();
+    private final List<Player> viewers = new ArrayList<>();
+    private final Visualizer runnableObject = new Visualizer();
+    private boolean isVisualized = false;
+
+    public CuboidRegion() {
+    }
 
     // Constructors
     public CuboidRegion(World world, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
-        this.world = world;
-        this.minX = Math.min(minX, maxX);
-        this.minY = Math.min(minY, maxY);
-        this.minZ = Math.min(minZ, maxZ);
-        this.maxX = Math.max(minX, maxX);
-        this.maxY = Math.max(minY, maxY);
-        this.maxZ = Math.max(minZ, maxZ);
-        this.id = UUID.randomUUID().toString(); // Could be made more configurable
+        this(new Location(world, minX, minY, minZ), new Location(world, maxX, maxY, maxZ));
     }
 
     public CuboidRegion(Location corner1, Location corner2) {
-        this(
-                corner1.getWorld(),
-                corner1.getX(), corner1.getY(), corner1.getZ(),
-                corner2.getX(), corner2.getY(), corner2.getZ()
-        );
+        pointA = corner1;
+        pointB = corner2;
+        world = corner1.getWorld();
+        id = UUID.randomUUID().toString();
+        setMinMax();
     }
 
     // Interface methods
@@ -57,6 +56,12 @@ public class CuboidRegion implements Region {
 
     @Override
     public World getWorld() {
+        if (world == null) {
+            if (pointA.getWorld() != null) {
+                world = pointA.getWorld();
+            }
+
+        }
         return world;
     }
 
@@ -82,6 +87,52 @@ public class CuboidRegion implements Region {
         if (!(other.getWorld().equals(this.world))) return false;
         BoundingBox otherBox = other.getBoundingBox();
         return this.getBoundingBox().overlaps(otherBox);
+    }
+
+    public Location getPointA() {
+        if (pointA.getWorld() == null) {
+            if (world != null) {
+                pointA.setWorld(world);
+            } else {
+                pointA.setWorld(Bukkit.getWorlds().getFirst());
+            }
+        }
+        return pointA;
+    }
+
+    public Location getPointB() {
+        if (pointB.getWorld() == null) {
+            if (world != null) {
+                pointB.setWorld(world);
+            } else {
+                pointB.setWorld(Bukkit.getWorlds().getFirst());
+            }
+        }
+        return pointB;
+    }
+
+    public void setPointA(Location pointA) {
+        this.pointA = pointA;
+        setMinMax();
+    }
+
+    public void setPointB(Location pointB) {
+        this.pointB = pointB;
+        setMinMax();
+    }
+
+    private void setMinMax() {
+        if (pointA == null || pointB == null) return;
+        setMinMax(pointA, pointB);
+    }
+
+    private void setMinMax(Location pointA, Location pointB) {
+        minX = Math.min(pointA.getX(), pointB.getX());
+        minY = Math.min(pointA.getY(), pointB.getY());
+        minZ = Math.min(pointA.getZ(), pointB.getZ());
+        maxX = Math.max(pointA.getX(), pointB.getX());
+        maxY = Math.max(pointA.getY(), pointB.getY());
+        maxZ = Math.max(pointA.getZ(), pointB.getZ());
     }
 
     @Override
@@ -137,29 +188,20 @@ public class CuboidRegion implements Region {
         return metadata;
     }
 
+    public Location getMin() {
+        setMinMax();
+        return new Location(world, minX, minY, minZ);
+    }
+
+    public Location getMax() {
+        setMinMax();
+        return new Location(world, maxX, maxY, maxZ);
+    }
+
     @Override
     public List<Location> getEdges() {
-        List<Location> edges = List.of();
-
-        Location min = new Location(world, minX, minY, minZ);
-        Location max = new Location(world, maxX, maxY, maxZ);
-
-        addEdge(edges, (int)minX, (int)maxX, CoordinateType.X, minY, minZ); // Bottom face, minZ
-        addEdge(edges, (int)minX, (int)maxX, CoordinateType.X, minY, maxZ); // Bottom face, maxZ
-        addEdge(edges, (int)minX, (int)maxX, CoordinateType.X, maxY, minZ); // Top face, minZ
-        addEdge(edges, (int)minX, (int)maxX, CoordinateType.X, maxY, maxZ); // Top face, maxZ
-
-        addEdge(edges, (int)minX, (int)maxX, CoordinateType.Z, minY, minX); // Front face, minX
-        addEdge(edges, (int)minX, (int)maxX, CoordinateType.Z, minY, maxX); // Front face, maxX
-        addEdge(edges, (int)minX, (int)maxX, CoordinateType.Z, maxY, minX); // Back face, minX
-        addEdge(edges, (int)minX, (int)maxX, CoordinateType.Z, maxY, maxX); // Back face, maxX
-
-        addEdge(edges, (int)minY, (int)maxY, CoordinateType.Y, minX, minZ); // Left face, minZ
-        addEdge(edges, (int)minY, (int)maxY, CoordinateType.Y, minX, maxZ); // Left face, maxZ
-        addEdge(edges, (int)minY, (int)maxY, CoordinateType.Y, maxX, minZ); // Right face, minZ
-        addEdge(edges, (int)minY, (int)maxY, CoordinateType.Y, maxX, maxZ); // Right face, maxZ
-
-        return edges;
+        Set<Location> boundingBox = WorldUtils.getBoundingBox(getMin(), getMax());
+        return boundingBox.stream().toList();
     }
 
     private void addEdge(List<Location> edges, int loopMin, int loopMax, CoordinateType type, double valueA, double valueB) {
@@ -216,32 +258,44 @@ public class CuboidRegion implements Region {
     public void visualize() {
         if (isVisualized()) return;
 
-        runnableObject = RunnableObject.of(() -> {
-            for (Location loc : getPoints()) {
-                Particle.FLAME.builder().count(1).color(Color.AQUA)
-                        .location(loc)
-                        .receivers(viewers);
-            }
-        });
-        runnableObject.runTaskTimer(0, 5);
+        runnableObject.changeViewers(viewers);
+        runnableObject.changeEdges(getEdges());
+        runnableObject.runTaskTimer(0, 1);
+        isVisualized(true);
     }
 
     @Override
     public void unvisualize() {
+        viewers.clear();
         runnableObject.cancel();
+        isVisualized(false);
     }
 
     @Override
     public boolean isVisualized() {
-        return false;
+        return isVisualized;
+    }
+
+    public void isVisualized(boolean isVisualized) {
+        this.isVisualized = isVisualized;
     }
 
     public void addViewer(Player player) {
+        if (viewers.contains(player)) return;
         viewers.add(player);
+
+        if (!isVisualized()) {
+            visualize();
+        }
+
     }
 
     public void removeViewer(Player player) {
         viewers.remove(player);
+
+        if (viewers.isEmpty()) {
+            unvisualize();
+        }
     }
 
     @Override
@@ -271,5 +325,31 @@ public class CuboidRegion implements Region {
                 ", max=(" + maxX + ',' + maxY + ',' + maxZ + ')' +
                 ", id=" + id +
                 '}';
+    }
+
+    public class Visualizer extends RunnableObject {
+
+        private final List<Player> viewers = new ArrayList<>();
+        private final List<Location> edges = new ArrayList<>();
+
+        public void changeViewers(List<Player> viewers) {
+            this.viewers.clear();
+            this.viewers.addAll(viewers);
+        }
+
+        public void changeEdges(List<Location> locations) {
+            this.edges.clear();
+            this.edges.addAll(locations);
+        }
+
+        @Override
+        public void run() {
+            for (Location loc : getEdges()) {
+                Particle.DUST.builder().count(1).color(Color.AQUA)
+                        .location(WorldUtils.getBlockCenter(loc))
+                        .receivers(this.viewers)
+                        .spawn();
+            }
+        }
     }
 }
