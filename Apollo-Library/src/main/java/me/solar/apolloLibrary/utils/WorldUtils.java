@@ -17,34 +17,38 @@ public class WorldUtils {
     }
 
     public static Set<Location> getBoundingBox(Location location1, Location location2) {
-        List<Vector> vectors = new ArrayList<>();
+        Set<Location> locations = new HashSet<>();
         Location min = getLocationMin(location1, location2);
         Location max = getLocationMax(location1, location2);
-        int height = (int) (max.getY() - min.getY());
-        List<Vector> bottomCorners = new ArrayList<>();
-        bottomCorners.add(new Vector(min.getX(), min.getY(), min.getZ()));
-        bottomCorners.add(new Vector(max.getX(), min.getY(), min.getZ()));
-        bottomCorners.add(new Vector(max.getX(), min.getY(), max.getZ()));
-        bottomCorners.add(new Vector(min.getX(), min.getY(), max.getZ()));
 
-        for (int i = 0; i <= height; i++) {
-            Vector p1 = bottomCorners.get(i).clone();
-            Vector p2 = i + 1 < bottomCorners.size() ? bottomCorners.get(i + 1) : bottomCorners.getFirst();
-            Vector p3 = p1.add(new Vector(0, height, 0));
-            Vector p4 = p2.add(new Vector(0, height, 0));
-            vectors.addAll(plotLine(p1, p2));
-            vectors.addAll(plotLine(p2, p3));
-            vectors.addAll(plotLine(p3, p4));
-            vectors.addAll(plotLine(p4, p1));
+        World world = min.getWorld();
+        int minX = min.getBlockX();
+        int minY = min.getBlockY();
+        int minZ = min.getBlockZ();
+        int maxX = max.getBlockX();
+        int maxY = max.getBlockY();
+        int maxZ = max.getBlockZ();
 
-            for (double offset = 1; offset < height; offset++) {
-                Vector p5 = p1.add(new Vector(0, offset, 0));
-                Vector p6 = p2.add(new Vector(0, offset, 0));
-                vectors.addAll(plotLine(p5, p6));
+        // Vertical edges
+        for (int x : new int[]{minX, maxX}) {
+            for (int z : new int[]{minZ, maxZ}) {
+                for (int y = minY; y <= maxY; y++) {
+                    locations.add(new Location(world, x, y, z));
+                }
             }
         }
-
-        return vectorsToLocations(location1.getWorld(), vectors);
+        // Horizontal edges (top and bottom)
+        for (int y : new int[]{minY, maxY}) {
+            for (int x = minX; x <= maxX; x++) {
+                locations.add(new Location(world, x, y, minZ));
+                locations.add(new Location(world, x, y, maxZ));
+            }
+            for (int z = minZ; z <= maxZ; z++) {
+                locations.add(new Location(world, minX, y, z));
+                locations.add(new Location(world, maxX, y, z));
+            }
+        }
+        return locations;
     }
 
     public static Collection<Vector> plotLine(Vector pointA, Vector pointB) {
